@@ -1,14 +1,16 @@
 package lab45;
 
-public class Test10 {
+public class Palindrom {
 
 	public static void main(String[] args) {
+		int c;
 		int b = 0;
 		int a = (int)(Math.random()*10_001);
 		int x = a;
 		while (a != 0) {
-			b = a % 10;	
-			b = b + (b*10);
+			c = a % 10;
+			b = b * 10;
+			b = b + c;	
 			a = (int)( a / 10);
 		}
 		System.out.println(x);
@@ -18,14 +20,14 @@ public class Test10 {
 		} else
 			System.out.println("no palindrom");
 		{
-
 		}
 		
+	}
+}
 		
 			   
 			  
-		   }
-	}
+		   
 	
 				   	
 					   
