@@ -9,13 +9,9 @@ public class Test {
 		for (int i = 0; i < 10; i++) {
 			int arr = (int)(Math.random()*101);
 			
-			System.out.print(arr + ",");
-			sum = sum + arr;
-			avg = sum /10;
+			System.out.println(arr);
+			
 		}
-		System.out.println();
-		System.out.println("the sum of the number: " + sum);
-		System.out.println("the avg: " + avg);
 	}
 
 }
