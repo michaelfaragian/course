@@ -1,4 +1,4 @@
-package interfaces;
+package e.interfaces;
 
 public interface Advanedflyer extends Flyer , Navigator{
 

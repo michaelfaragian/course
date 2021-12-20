@@ -1,6 +1,6 @@
 package a.animals;
 
-import interfaces.Flyer;
+import e.interfaces.Flyer;
 
 public class Butterfly extends Insect implements Flyer {
 

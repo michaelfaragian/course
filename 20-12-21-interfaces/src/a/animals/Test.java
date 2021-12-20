@@ -1,8 +1,8 @@
 package a.animals;
 
-import interfaces.Advanedflyer;
-import interfaces.Flyer;
-import interfaces.Navigator;
+import e.interfaces.Advanedflyer;
+import e.interfaces.Flyer;
+import e.interfaces.Navigator;
 
 public class Test {
 

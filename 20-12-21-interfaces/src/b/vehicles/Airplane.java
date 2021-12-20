@@ -1,6 +1,6 @@
 package b.vehicles;
 
-import interfaces.Flyer;
+import e.interfaces.Flyer;
 
 public class Airplane implements Flyer {
 

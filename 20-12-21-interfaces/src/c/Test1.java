@@ -5,7 +5,7 @@ import a.animals.Bat;
 import a.animals.Butterfly;
 import a.animals.Mammal;
 import b.vehicles.Airplane;
-import interfaces.Flyer;
+import e.interfaces.Flyer;
 
 public class Test1 {
 

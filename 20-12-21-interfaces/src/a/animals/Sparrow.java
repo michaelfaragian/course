@@ -1,7 +1,7 @@
 package a.animals;
 
-import interfaces.Flyer;
-import interfaces.Navigator;
+import e.interfaces.Flyer;
+import e.interfaces.Navigator;
 
 public class Sparrow extends Bird implements Flyer,Navigator
 {

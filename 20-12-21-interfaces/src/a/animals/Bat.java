@@ -1,6 +1,6 @@
 package a.animals;
 
-import interfaces.Advanedflyer;
+import e.interfaces.Advanedflyer;
 
 public class Bat extends Mammal implements Advanedflyer {
 

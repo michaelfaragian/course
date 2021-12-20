@@ -1,6 +1,6 @@
 package a.animals;
 
-import interfaces.Navigator;
+import e.interfaces.Navigator;
 
 public class Ant extends Insect implements Navigator {
 
