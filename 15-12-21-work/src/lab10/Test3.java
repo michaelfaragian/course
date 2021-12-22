@@ -12,8 +12,11 @@ public class Test3 {
 			arr[i] = (int)(Math.random()*11);
 		}
 		System.out.println(Arrays.toString(arr));
-		
-		System.arraycopy(newarr, 0, arr, 9, 0);
+		int i = 0;
+		for (int j = arr.length -1; j >= 0; j--) {
+			newarr[j] = arr[i];
+			i++;
+		}
 		System.out.println(Arrays.toString(newarr));
 	}
 
