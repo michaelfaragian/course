@@ -10,7 +10,7 @@ public class Main {
 		showCountry(israel);
 		countryCars(israel);
 		highwayCars(israel);
-		System.out.println(avgSpeed(israel) / countryCars(israel));
+		System.out.println(avgSpeed(israel));
 		
 
 		// random();
@@ -24,7 +24,7 @@ public class Main {
 				 sum +=  country.getHighways()[i].getCars()[j].getSpeed();
 			}
 		}
-		return sum / countryCars(israel);
+		return sum / countryCars(country);
 	}
 
 	private static void highwayCars(Country israel) {
@@ -38,7 +38,7 @@ public class Main {
 		}
 	}
 
-	private static void countryCars(Country israel) {
+	private static int countryCars(Country israel) {
 		int counter = 0;
 		for (int i = 0; i < israel.getHighways().length; i++) {
 			for (int j = 0; j < israel.getHighways()[i].getCars().length; j++) {
@@ -46,7 +46,7 @@ public class Main {
 			}
 		}
 		System.out.println("the number of cars in country: " + counter);
-
+		return counter;
 	}
 
 	private static Car random() {
