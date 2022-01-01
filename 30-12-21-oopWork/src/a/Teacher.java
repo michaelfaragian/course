@@ -4,6 +4,11 @@ import a.Grade.Profession;
 
 public class Teacher extends Person {
 	
+	@Override
+	public String toString() {
+		return "Teacher [profession=" + profession + ", Name= " + getName() + ", Age= " + getAge() + "]"+"\n"; 
+	}
+
 	private Profession profession;
 
 	public Teacher(String name, int age, Profession profession) {

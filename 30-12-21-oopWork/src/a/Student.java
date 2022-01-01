@@ -34,10 +34,13 @@ public class Student extends Person {
 		this.grades = grades;
 	}
 
+
 	@Override
 	public String toString() {
 		return "Student [grades=" + Arrays.toString(grades) + "]";
 	}
+
+	
 	
 	  
 	

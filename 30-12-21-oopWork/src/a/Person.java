@@ -6,11 +6,7 @@ public class Person {
 	private int age = 20; // 20-120
 	
 	
-	@Override
-	public String toString() {
-		return  "[name=" + name + ", age=" + age + "]";
-	}
-
+	
 
 	public String getName() {
 		return name;

@@ -45,8 +45,29 @@ public class ClassRoom {
 
 	@Override
 	public String toString() {
-		return "ClassRoom [name=" + name + ", teacher=" + teacher + ", students=" + Arrays.toString(students) + "]";
+		return "ClassRoom [name=" + name + ", teacher=" + teacher + ", students=" + Arrays.toString(students) + "]"+ "\n";
 	}
 
+	
+	public static int classStudents() {
+		 Student [] students = new Student[15];
+		 int c = 0;
+		for (int i = 0; i < students.length ; i++) {
+			c++;
+		}
+		return c;
+	}
+	
+	public static int sumClass() {
+		Student [] students = new Student[15];
+		Grade [] grades = new Grade[6];
+		int sum = 0;
+		for (int i = 0; i < students.length; i++) {
+			for (int j = 0; j < grades.length; j++) {
+				sum += students[i].getGrades()[j].getScore();
+			}
+		}
+		return sum;
+	}
 	
 }

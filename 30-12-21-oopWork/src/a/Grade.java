@@ -6,9 +6,11 @@ public class Grade {
 	private Profession profession;
 	
 	
+	
+
 	@Override
 	public String toString() {
-		return "Grade [score=" + score + ", profession=" + profession + "]";
+		return "[score=" + score + ", profession=" + profession + "]";
 	}
 
 

@@ -8,6 +8,10 @@ public class SchoolStatistics {
 	public static int a = 1;
 	public static int b = 1;
 	public static int c = 1;
+	private static int sumSchool;
+	private static int schoolStudents;
+	private static int sumClass;
+	private static int classStudents;
 
 	public static void main(String[] args) {
 
@@ -15,17 +19,25 @@ public class SchoolStatistics {
 		School school = creatSchool();
 		
 		showSchool(school);
+		avgSchool(school);
 		
-		//System.out.println(	school);
 		
 	}
 
 	
 
+	private static void avgSchool(School school) {
+		
+		System.out.println(sumClass / classStudents);
+	}
+
+
+
 	private static void showSchool(School school) {
 		
 		for (int i = 0; i < school.getClassRooms().length; i++) {
 			System.out.println(school.getClassRooms()[i]);
+			System.out.println();
 		}
 	}
 
