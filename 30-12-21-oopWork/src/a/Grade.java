@@ -10,7 +10,7 @@ public class Grade {
 
 	@Override
 	public String toString() {
-		return "[score=" + score + ", profession=" + profession + "]";
+		return "[score=" + score + ", profession=" + profession + "]" + "\n";
 	}
 
 

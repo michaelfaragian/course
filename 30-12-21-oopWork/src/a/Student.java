@@ -37,8 +37,12 @@ public class Student extends Person {
 
 	@Override
 	public String toString() {
-		return "Student [grades=" + Arrays.toString(grades) + "]";
+		return "[" + Arrays.toString(grades) + ",Name=" + getName() + ", Age=" + getAge()
+				+ "]" + "\n";
 	}
+
+
+	
 
 	
 	

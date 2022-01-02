@@ -28,7 +28,8 @@ public class SchoolStatistics {
 
 	private static void avgSchool(School school) {
 		
-		System.out.println(sumClass / classStudents);
+		System.out.println(schoolStudents);
+		
 	}
 
 

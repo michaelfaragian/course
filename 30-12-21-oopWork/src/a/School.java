@@ -28,19 +28,19 @@ public class School {
 		return "School [classRooms=" + Arrays.toString(classRooms) + "]";
 	}
 	
-	public static int schoolStudents() {
+	public static int schoolStudents(School school) {
 		ClassRoom [] classRooms = new ClassRoom [5];
 		Student [] students = new Student[15];
 		int c= 0;
 		for (int i = 0; i < classRooms.length; i++) {
-			for (int j = 0; j < students.length; j++) {
+			for (int j = 0; j < classRooms[i].getStudents().length; j++) {
 				c++;
 			}
 			
 		}
 		return c;
 	}
-	public static int sumSchool() {
+	public static int sumSchool(School school) {
 		ClassRoom [] classRooms = new ClassRoom [5];
 		Student [] students = new Student[15];
 		Grade [] grades = new Grade[6];
