@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Coupons.core.DAO.ConnectionPool;
-import Coupons.core.DAO.customerDAO;
+import Coupons.core.DAO.CustomerDAO;
 import Coupons.core.beans.Company;
 import Coupons.core.beans.Customer;
 import Coupons.core.exception.CouponSystemException;
 
-public class customerDBDAO implements customerDAO{
+public class CustomerDBDAO implements CustomerDAO{
 
 	@Override
 	public boolean isCustomerExists(String email, String Password) throws CouponSystemException {

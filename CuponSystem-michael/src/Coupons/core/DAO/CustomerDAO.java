@@ -6,7 +6,7 @@ import Coupons.core.beans.Company;
 import Coupons.core.beans.Customer;
 import Coupons.core.exception.CouponSystemException;
 
-public interface customerDAO {
+public interface CustomerDAO {
 
 	boolean isCustomerExists(String email, String Password) throws CouponSystemException;
 
