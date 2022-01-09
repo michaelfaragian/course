@@ -1,4 +1,4 @@
-package Coupons.core.dao;
+package Coupons.core.DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
