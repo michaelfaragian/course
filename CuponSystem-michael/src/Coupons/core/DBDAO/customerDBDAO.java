@@ -1,25 +1,22 @@
 package Coupons.core.DBDAO;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import Coupons.core.DAO.CompanyDAO;
 import Coupons.core.DAO.ConnectionPool;
+import Coupons.core.DAO.customerDAO;
 import Coupons.core.beans.Company;
+import Coupons.core.beans.Customer;
 import Coupons.core.exception.CouponSystemException;
 
-public class CompanyDBDAO implements CompanyDAO {
-
-	// private ConnectionPool connectionPool = new ConnectionPool();
+public class customerDBDAO implements customerDAO{
 
 	@Override
-	public boolean isCompanyExists(String email, String Password) throws CouponSystemException {
+	public boolean isCustomerExists(String email, String Password) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
 		String sql = "select * from company where email = ? and password = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
@@ -29,87 +26,86 @@ public class CompanyDBDAO implements CompanyDAO {
 			return rs.next();
 
 		} catch (SQLException e) {
-			throw new CouponSystemException("company not exists", e);
+			throw new CouponSystemException("Customer not exists", e);
 		} finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
-
 	}
 
 	@Override
-	public int addCompany(Company company) throws CouponSystemException {
+	public int addCustomer(Customer customer) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "insert into company values (0, ?, ?, ?);";
+		String sql = "insert into company values (0, ?, ?, ?, ?);";
 		try (PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
-			pstmt.setString(1, company.getName());
-			pstmt.setString(2, company.getEmail());
-			pstmt.setString(3, company.getPassword());
+			pstmt.setString(1, customer.getFirstName());
+			pstmt.setString(2, customer.getLastName());
+			pstmt.setString(3, customer.getEmail());
+			pstmt.setString(4, customer.getPassword());
 			pstmt.executeUpdate();
 			ResultSet rsId = pstmt.getGeneratedKeys();
 			rsId.next();
 			int id = rsId.getInt(1);
 			return id;
 		} catch (SQLException e) {
-			throw new CouponSystemException("add company failed", e);
+			throw new CouponSystemException("add customer failed", e);
 		} finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
-
 	}
 
 	@Override
-	public void updateCompany(Company company) throws CouponSystemException {
+	public void updateCustomer(Customer customer) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "update company set name = ? email = ? password= ? where id = ?";
+		String sql = "update company set first name = ? last name = ? email = ? password= ? where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
-			pstmt.setString(1, company.getName());
-			pstmt.setString(2, company.getEmail());
-			pstmt.setString(3, company.getPassword());
-			pstmt.setInt(4, company.getId());
+			pstmt.setString(1, customer.getFirstName());
+			pstmt.setString(2, customer.getLastName());
+			pstmt.setString(3, customer.getEmail());
+			pstmt.setString(4, customer.getPassword());
+			pstmt.setInt(5, customer.getId());
 			int rowCount = pstmt.executeUpdate();
 			if (rowCount == 0) {
-				throw new CouponSystemException("update Company failed - company " + company.getId() + "not found");
+				throw new CouponSystemException("update customer failed - company " + customer.getId() + "not found");
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("update company failed", e);
+			throw new CouponSystemException("update customer failed", e);
 		} finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
-
 	}
 
 	@Override
-	public void deleteCompany(int CompanyID) throws CouponSystemException {
-
+	public void deleteCustomer(int CustomerID) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "delete from company where id = ?";
+		String sql = "delete from Customer where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
-			pstmt.setInt(1, CompanyID);
+			pstmt.setInt(1, CustomerID);
 		} catch (SQLException e) {
-			throw new CouponSystemException("delete company failed", e);
+			throw new CouponSystemException("delete Customer failed", e);
 		} finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
+		
 	}
 
 	@Override
-	public List<Company> getAllCompanies() throws CouponSystemException {
-
+	public List<Customer> getAllCustomers() throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
 		String sql = "select * from company";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
-			List<Company> companies = new ArrayList<>();
+			List<Customer> customers = new ArrayList<>();
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				Company company = new Company();
-				company.setId(rs.getInt("id"));
-				company.setName(rs.getString("name"));
-				company.setEmail(rs.getString("email"));
-				company.setPassword(rs.getString("password"));
-				companies.add(company);
+				Customer customer = new Customer();
+				customer.setId(rs.getInt("id"));
+				customer.setFirstName(rs.getString("first name"));
+				customer.setLastName(rs.getString("last name"));
+				customer.setEmail(rs.getString("email"));
+				customer.setPassword(rs.getString("password"));
+				customers.add(customer);
 			}
-			return companies;
+			return customers;
 		} catch (SQLException e) {
 			throw new CouponSystemException("getAllCompanies failed", e);
 		} finally {
@@ -118,26 +114,30 @@ public class CompanyDBDAO implements CompanyDAO {
 	}
 
 	@Override
-	public Company getOneCompany(int companyID) throws CouponSystemException {
-		Company company = new Company();
+	public Customer getOneCustomer(int CustomerID) throws CouponSystemException {
+		Customer customer = new Customer();
 		Connection con = ConnectionPool.getInstance().getConnection();
 		String sql = "select from company where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
-			pstmt.setInt(1, companyID);
+			pstmt.setInt(1, CustomerID);
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
-				company.setId(companyID);
-				company.setName(rs.getString("name"));
-				company.setEmail(rs.getString("email"));
-				company.setPassword(rs.getNString("password"));
+				customer.setId(CustomerID);
+				customer.setFirstName(rs.getString("first name"));
+				customer.setLastName(rs.getString("last name"));
+				customer.setEmail(rs.getString("email"));
+				customer.setPassword(rs.getNString("password"));
 			}
 			
-			return company;
+			return customer;
 		} catch (SQLException e) {
 			throw new CouponSystemException("getOneCompany failed", e);
 		} finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
+	
+		
+		
 	}
 
 }
