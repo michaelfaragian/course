@@ -1,10 +1,10 @@
 package Coupons.core.DBDAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,17 +22,16 @@ public class CouponDBDAO implements CouponDAO{
 		String sql = "insert into coupon values (0, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);){
 			pstmt.setInt(1, coupon.getCompanyID());
-			pstmt.setObject(2, coupon.getCategory());
+			pstmt.setString(2, coupon.getCategory().toString());
 			pstmt.setString(3, coupon.getTitle());
 			pstmt.setString(4, coupon.getDescription());
-			pstmt.setObject(5, coupon.getStartDate());
-			pstmt.setObject(6, coupon.getEndDate());
+			pstmt.setDate(5, Date.valueOf(coupon.getStartDate()));
+			pstmt.setDate(6, Date.valueOf(coupon.getEndDate()));
 			pstmt.setInt(7, coupon.getAmount());
 			pstmt.setDouble(8, coupon.getPrice());
 			pstmt.setString(9, coupon.getImage());
 			pstmt.executeUpdate();
 			ResultSet rs = pstmt.getGeneratedKeys();
-			rs.next();
 			rs.next();
 			int id = rs.getInt(1);
 			return id;
@@ -55,11 +54,11 @@ public class CouponDBDAO implements CouponDAO{
 				+ "startDate = ?  endDate = ? amount = ? price = ? image =? where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setInt(1, coupon.getCompanyID());
-			pstmt.setObject(2, coupon.getCategory());
+			pstmt.setString(2, coupon.getCategory().toString());
 			pstmt.setString(3, coupon.getTitle());
 			pstmt.setString(4, coupon.getDescription());
-			pstmt.setObject(5, coupon.getStartDate());
-			pstmt.setObject(6, coupon.getEndDate());
+			pstmt.setDate(5, Date.valueOf(coupon.getStartDate()));
+			pstmt.setDate(6, Date.valueOf(coupon.getEndDate()));
 			pstmt.setInt(7, coupon.getAmount());
 			pstmt.setDouble(8, coupon.getPrice());
 			pstmt.setString(9, coupon.getImage());
@@ -82,6 +81,10 @@ public class CouponDBDAO implements CouponDAO{
 		String sql = "delete from coupon where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setInt(1, couponID);
+			int rowCount = pstmt.executeUpdate();
+			if (rowCount == 0) {
+				throw new CouponSystemException("update Company failed - company " + couponID + " not found");
+			}
 		} catch (SQLException e) {
 			throw new CouponSystemException("delete coupon failed", e);
 		}finally {
@@ -96,54 +99,94 @@ public class CouponDBDAO implements CouponDAO{
 		try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			List<Coupon> coupons = new ArrayList<>();
 			ResultSet rs = pstmt.executeQuery();
+			if(rs.next() == false) {
+				throw new CouponSystemException("not exist any coupon");
+			}
 			while (rs.next()) {
 				Coupon coupon = new Coupon();
 				coupon.setId(rs.getInt(1));
 				coupon.setCompanyID(rs.getInt(2));
-				coupon.setCategory((Category) rs.getObject(3));
+				coupon.setCategory(Category.valueOf(rs.getString(3)));
 				coupon.setTitle(rs.getString(4));
 				coupon.setDescription(rs.getString(5));
-				coupon.setStartDate((LocalDate) rs.getObject(6));
-				coupon.setEndDate((LocalDate) rs.getObject(7));
+				coupon.setStartDate(rs.getDate(6).toLocalDate());
+				coupon.setEndDate(rs.getDate(7).toLocalDate());
 				coupon.setAmount(rs.getInt(8));
 				coupon.setPrice(rs.getDouble(9));
 				coupon.setImage(rs.getString(10));
+				coupons.add(coupon);
 				
 				
 			}
+			return coupons;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-//		this.id = id;
-//		this.companyID = companyID;
-//		this.category = category;
-//		this.title = title;
-//		this.description = description;
-//		this.startDate = startDate;
-//		this.endDate = endDate;
-//		this.amount = amount;
-//		this.price = price;
-//		this.image = image;
-			e.printStackTrace();
+			throw new CouponSystemException("get all coupons failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
 		}
-		return null;
+		
+		
 	}
 
 	@Override
 	public Coupon getOneCoupon(int couponID) throws CouponSystemException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "select * from coupon where id = ?";
+		Coupon coupon = new Coupon();
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, couponID);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				coupon.setId(couponID);
+				coupon.setCompanyID(rs.getInt(2));
+				coupon.setCategory(Category.valueOf(rs.getString(3)));
+				coupon.setTitle(rs.getString(4));
+				coupon.setDescription(rs.getString(5));
+				coupon.setStartDate(rs.getDate(6).toLocalDate());
+				coupon.setEndDate(rs.getDate(7).toLocalDate());
+				coupon.setAmount(rs.getInt(8));
+				coupon.setPrice(rs.getFloat(9));
+				coupon.setImage(rs.getString(10));
+			}else {
+				throw new CouponSystemException("the comapny " + couponID + " not exist");
+			}
+			return coupon;
+		} catch (SQLException e) {
+			throw new CouponSystemException("get one coupon failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
 	}
 
 	@Override
 	public void addCouponPurchase(int customerID, int couponID) throws CouponSystemException {
-		// TODO Auto-generated method stub
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "insert into customer_coupon values (?, ?) ";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, customerID);
+			pstmt.setInt(2, couponID);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new CouponSystemException("add Coupon Purchase failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
 		
 	}
 
 	@Override
 	public void deleteCouponPurchase(int customerID, int couponID) throws CouponSystemException {
-		// TODO Auto-generated method stub
-		
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "delete from customer_coupon where customer_id = ? coupon_id = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, customerID);
+			pstmt.setInt(2, couponID);
+		} catch (SQLException e) {
+			throw new CouponSystemException("delete Coupon Purchase failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+			
 	}
 
 }

@@ -9,7 +9,6 @@ import java.util.List;
 
 import Coupons.core.DAO.ConnectionPool;
 import Coupons.core.DAO.CustomerDAO;
-import Coupons.core.beans.Company;
 import Coupons.core.beans.Customer;
 import Coupons.core.exception.CouponSystemException;
 
@@ -81,6 +80,10 @@ public class CustomerDBDAO implements CustomerDAO{
 		String sql = "delete from Customer where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
 			pstmt.setInt(1, CustomerID);
+			int rowCount = pstmt.executeUpdate();
+			if (rowCount == 0) {
+				throw new CouponSystemException("update Company failed - company " + CustomerID + " not found");
+			}
 		} catch (SQLException e) {
 			throw new CouponSystemException("delete Customer failed", e);
 		} finally {
@@ -96,6 +99,9 @@ public class CustomerDBDAO implements CustomerDAO{
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
 			List<Customer> customers = new ArrayList<>();
 			ResultSet rs = pstmt.executeQuery();
+			if (rs.next() == false) {
+				throw new CouponSystemException("not exist any customer");
+			}
 			while (rs.next()) {
 				Customer customer = new Customer();
 				customer.setId(rs.getInt("id"));
@@ -127,6 +133,8 @@ public class CustomerDBDAO implements CustomerDAO{
 				customer.setLastName(rs.getString("last name"));
 				customer.setEmail(rs.getString("email"));
 				customer.setPassword(rs.getNString("password"));
+			}else {
+				throw new CouponSystemException("the comapny " + CustomerID + " not exist");
 			}
 			
 			return customer;
