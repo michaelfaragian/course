@@ -177,7 +177,7 @@ public class CouponDBDAO implements CouponDAO{
 	@Override
 	public void deleteCouponPurchase(int customerID, int couponID) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "delete from customer_coupon where customer_id = ? coupon_id = ?";
+		String sql = "delete from customer_coupon where customer_id = ? and coupon_id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setInt(1, customerID);
 			pstmt.setInt(2, couponID);

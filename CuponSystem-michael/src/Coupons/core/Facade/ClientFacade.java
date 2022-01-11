@@ -12,11 +12,6 @@ public abstract class ClientFacade {
 	protected CouponDAO couponDAO;
 	
 	
-	public ClientFacade(CompanyDAO companyDBDAO, CustomerDAO customerDBDAO, CouponDAO couponDBDAO) {
-		this.companyDAO = companyDBDAO;
-		this.customerDAO = customerDBDAO;
-		this.couponDAO = couponDBDAO;
-	}
 	
 	public abstract Boolean login (String email, String password) throws CouponSystemException;
 	
