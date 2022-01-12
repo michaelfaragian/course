@@ -55,7 +55,7 @@ public class CustomerDBDAO implements CustomerDAO{
 	@Override
 	public void updateCustomer(Customer customer) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "update company set first name = ? last name = ? email = ? password= ? where id = ?";
+		String sql = "update company set first name = ?, last name = ?, email = ?, password= ? where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
 			pstmt.setString(1, customer.getFirstName());
 			pstmt.setString(2, customer.getLastName());
@@ -123,7 +123,7 @@ public class CustomerDBDAO implements CustomerDAO{
 	public Customer getOneCustomer(int CustomerID) throws CouponSystemException {
 		Customer customer = new Customer();
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "select from company where id = ?";
+		String sql = "select * from company where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
 			pstmt.setInt(1, CustomerID);
 			ResultSet rs = pstmt.executeQuery();

@@ -7,18 +7,21 @@ import Coupons.core.exception.CouponSystemException;
 
 public interface CouponDAO {
 	
-	public int addCoupon (Coupon coupon) throws CouponSystemException;
+	 int addCoupon (Coupon coupon) throws CouponSystemException;
 	
-	public void updateCoupon (Coupon coupon) throws CouponSystemException;
+	 void updateCoupon (Coupon coupon) throws CouponSystemException;
 	
-	public void deleteCoupon (int couponID) throws CouponSystemException;
+	 void deleteCoupon (int couponID) throws CouponSystemException;
 	
-	public List<Coupon> getAllCoupons () throws CouponSystemException;
 	
-	public Coupon getOneCoupon (int couponID) throws CouponSystemException;
+	 List<Coupon> getAllCoupons () throws CouponSystemException;
 	
-	public void addCouponPurchase (int customerID , int couponID) throws CouponSystemException;
+	 Coupon getOneCoupon (int couponID) throws CouponSystemException;
 	
-	public void deleteCouponPurchase (int customerID , int couponID) throws CouponSystemException;
+	 void addCouponPurchase (int customerID , int couponID) throws CouponSystemException;
+	
+	 void deleteCouponPurchase (int customerID , int couponID) throws CouponSystemException;
+	 
+	 void deleteCouponPurchaseWithCompanyID (int companyID) throws CouponSystemException;
 
 }

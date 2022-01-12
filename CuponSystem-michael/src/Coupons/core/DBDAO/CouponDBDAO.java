@@ -50,8 +50,8 @@ public class CouponDBDAO implements CouponDAO{
 	public void updateCoupon(Coupon coupon) throws CouponSystemException {
 
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql ="update coupon set  companyID = ?  category = ?  title = ? description = ?"
-				+ "startDate = ?  endDate = ? amount = ? price = ? image =? where id = ?";
+		String sql ="update coupon set  companyID = ?,  category = ?,  title = ?, description = ?,"
+				+ "startDate = ?,  endDate = ?, amount = ?, price = ?, image =? where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setInt(1, coupon.getCompanyID());
 			pstmt.setString(2, coupon.getCategory().toString());
@@ -181,12 +181,31 @@ public class CouponDBDAO implements CouponDAO{
 		try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setInt(1, customerID);
 			pstmt.setInt(2, couponID);
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new CouponSystemException("delete Coupon Purchase failed", e);
 		}finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
 			
+	}
+
+	@Override
+	public void deleteCouponPurchaseWithCompanyID(int companyID) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "delete from customer_coupon where coupon_id in (select id from coupon where company_id =? ";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, companyID);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new CouponSystemException("delete Coupon Purchase failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+			
+	
+		
+		
 	}
 
 }

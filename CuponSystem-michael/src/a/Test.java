@@ -1,20 +1,23 @@
 package a;
 
-import Coupons.core.DAO.CouponDAO;
-import Coupons.core.DBDAO.CouponDBDAO;
-import Coupons.core.beans.Coupon;
+import Coupons.core.DAO.CompanyDAO;
+import Coupons.core.DBDAO.CompanyDBDAO;
+import Coupons.core.Facade.AdminFacade;
+import Coupons.core.beans.Company;
 import Coupons.core.exception.CouponSystemException;
 
 public class Test {
-	public static void main(String[] args) {
-		Coupon coupon = new Coupon(0, 0, null, null, null, null, null, 0, 0, null);
-		CouponDAO c = new CouponDBDAO();
-		try {
-			c.addCoupon(coupon);
-		} catch (CouponSystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
+	
+	public
+	static void main(String[] args) throws CouponSystemException {
+		
+		AdminFacade adminFacade = new AdminFacade();
+		Company company = new Company(1, "mitgr", "msichah;e1@gmaihl", "123456");
+		System.out.println(adminFacade.addCompany(company));
+		CompanyDAO c = new CompanyDBDAO();
+		adminFacade.updateCompany(company);
+	
 	}
 
 }

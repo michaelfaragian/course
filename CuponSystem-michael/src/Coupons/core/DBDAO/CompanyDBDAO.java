@@ -46,6 +46,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			ResultSet rsId = pstmt.getGeneratedKeys();
 			rsId.next();
 			int id = rsId.getInt(1);
+			company.setId(id);
 			return id;
 		} catch (SQLException e) {
 			throw new CouponSystemException("add company failed", e);
@@ -58,7 +59,7 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public void updateCompany(Company company) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "update company set name = ? email = ? password= ? where id = ?";
+		String sql = "update company set name = ?, email = ?, password= ? where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
 			pstmt.setString(1, company.getName());
 			pstmt.setString(2, company.getEmail());
@@ -129,7 +130,7 @@ public class CompanyDBDAO implements CompanyDAO {
 	public Company getOneCompany(int companyID) throws CouponSystemException {
 		Company company = new Company();
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "select from company where id = ?";
+		String sql = "select * from company where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
 			pstmt.setInt(1, companyID);
 			ResultSet rs = pstmt.executeQuery();
@@ -150,4 +151,53 @@ public class CompanyDBDAO implements CompanyDAO {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
 	}
+
+	@Override
+	public boolean isCompanyExistsByNameOrEmail(String name, String email) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "select * from company where name = ? or email = ?";
+		try(PreparedStatement pstmt = con.prepareStatement(sql);) {
+			pstmt.setString(1, name);
+			pstmt.setString(2, email);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("company not exist", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+	}
+
+	@Override
+	public boolean isCompanyExistsByIdOrName(int id, String name) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "select * from company where id =? or name = ? ";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, id);
+			pstmt.setString(2, name);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("company not exist", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+	}
+
+	@Override
+	public boolean isCompanyExistsById(int id) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "select * from company where id =?  ";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("company not exist", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+	}
+
+	
 }
