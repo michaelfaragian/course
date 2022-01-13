@@ -193,7 +193,7 @@ public class CouponDBDAO implements CouponDAO{
 	@Override
 	public void deleteCouponPurchaseWithCompanyID(int companyID) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "delete from customer_coupon where coupon_id in (select id from coupon where company_id =? ";
+		String sql = "delete from customer_coupon where coupon_id in (select id from coupon where company_id =?) ";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setInt(1, companyID);
 			pstmt.executeUpdate();
