@@ -87,7 +87,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			pstmt.setInt(1, CompanyID);
 			int rowCount = pstmt.executeUpdate();
 			if (rowCount == 0) {
-				throw new CouponSystemException("update Company failed - company " + CompanyID + " not found");
+				throw new CouponSystemException("delete Company failed - company " + CompanyID + " not found");
 			}
 		} catch (SQLException e) {
 			throw new CouponSystemException("delete company failed", e);

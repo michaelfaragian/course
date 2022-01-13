@@ -9,12 +9,15 @@ import Coupons.core.exception.CouponSystemException;
 public interface CustomerDAO {
 
 	boolean isCustomerExists(String email, String Password) throws CouponSystemException;
+	
+	boolean isCustomerExistsByEmail(String email) throws CouponSystemException;
 
 	int addCustomer(Customer customer) throws CouponSystemException;
 
 	void updateCustomer(Customer customer) throws CouponSystemException;
 
 	void deleteCustomer(int CustomerID) throws CouponSystemException;
+	
 
 	List<Customer> getAllCustomers() throws CouponSystemException;
 

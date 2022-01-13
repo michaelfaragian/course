@@ -208,4 +208,42 @@ public class CouponDBDAO implements CouponDAO{
 		
 	}
 
+	@Override
+	public void deleteCouponWithCompanyID(int companyID) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "delete from coupon where company_id = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, companyID);
+			if (pstmt.executeUpdate() == 0) {
+				throw new CouponSystemException("delete coupon with company id " + companyID + " not found");
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("delete coupon with company id failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		
+	}
+
+	@Override
+	public void deleteCouponPurchaseWithCustomerID(int customerID) throws CouponSystemException {
+
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "delete from customer_coupon where coupon_id in (select id from coupon where customer_id =?) ";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, customerID);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new CouponSystemException("delete Coupon Purchase failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+			
+	
+		
+		
+	
+		
+	}
+
 }

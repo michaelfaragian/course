@@ -55,7 +55,7 @@ public class CustomerDBDAO implements CustomerDAO{
 	@Override
 	public void updateCustomer(Customer customer) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "update company set first name = ?, last name = ?, email = ?, password= ? where id = ?";
+		String sql = "update customer set first name = ?, last name = ?, email = ?, password= ? where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
 			pstmt.setString(1, customer.getFirstName());
 			pstmt.setString(2, customer.getLastName());
@@ -146,6 +146,21 @@ public class CustomerDBDAO implements CustomerDAO{
 	
 		
 		
+	}
+
+	@Override
+	public boolean isCustomerExistsByEmail(String email) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "select * from customer where email = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+		pstmt.setString(1, email);
+		ResultSet rs = pstmt.executeQuery();
+		return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("isCustomerExistsByEmail failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
 	}
 
 }
