@@ -246,4 +246,46 @@ public class CouponDBDAO implements CouponDAO{
 		
 	}
 
+	@Override
+	public void updateCouponWithoutCompanyID(Coupon coupon) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql ="update coupon set  category = ?,  title = ?, description = ?,"
+				+ "startDate = ?,  endDate = ?, amount = ?, price = ?, image =? where id = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setString(1, coupon.getCategory().toString());
+			pstmt.setString(2, coupon.getTitle());
+			pstmt.setString(3, coupon.getDescription());
+			pstmt.setDate(4, Date.valueOf(coupon.getStartDate()));
+			pstmt.setDate(5, Date.valueOf(coupon.getEndDate()));
+			pstmt.setInt(6, coupon.getAmount());
+			pstmt.setDouble(7, coupon.getPrice());
+			pstmt.setString(8, coupon.getImage());
+			pstmt.setInt(9, coupon.getId());
+			int rowCount= pstmt.executeUpdate();
+			if (rowCount == 0) {
+				throw new CouponSystemException("update coupon failed - coupon " + coupon.getId() + "not found");
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("update coupon failed", e);
+			
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+	}
+
+	@Override
+	public void deleteCouponPurchaseOnlyCouponID(int couponID) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "delete from customer_coupon where coupon_id = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, couponID);
+			pstmt.executeQuery();
+		} catch (SQLException e) {
+			throw new CouponSystemException("deleteCouponPurchaseOnlyCouponID", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		
+	}
+
 }

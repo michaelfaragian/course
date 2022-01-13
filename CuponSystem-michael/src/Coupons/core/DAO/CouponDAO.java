@@ -11,6 +11,8 @@ public interface CouponDAO {
 	
 	 void updateCoupon (Coupon coupon) throws CouponSystemException;
 	 
+	 void updateCouponWithoutCompanyID (Coupon coupon) throws CouponSystemException;
+	 
 	 void deleteCouponWithCompanyID (int companyID) throws CouponSystemException;
 	 
 	
@@ -25,7 +27,9 @@ public interface CouponDAO {
 	
 	 void deleteCouponPurchase (int customerID , int couponID) throws CouponSystemException;
 	 
+	 void deleteCouponPurchaseOnlyCouponID ( int couponID) throws CouponSystemException;
+	 
 	 void deleteCouponPurchaseWithCompanyID (int companyID) throws CouponSystemException;
 
-	 void deleteCouponPurchaseWithCustomerID (int companyID) throws CouponSystemException;
+	 void deleteCouponPurchaseWithCustomerID (int customerID) throws CouponSystemException;
 }

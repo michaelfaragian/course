@@ -2,7 +2,6 @@ package Coupons.core.Facade;
 
 import java.util.List;
 
-import Coupons.core.DAO.CompanyDAO;
 import Coupons.core.beans.Company;
 import Coupons.core.beans.Customer;
 import Coupons.core.exception.CouponSystemException;
