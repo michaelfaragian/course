@@ -171,7 +171,7 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public boolean isCompanyExistsByIdOrName(int id, String name) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "select * from company where id =? or name = ? ";
+		String sql = "select * from company where id =? and name = ? ";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setInt(1, id);
 			pstmt.setString(2, name);
@@ -228,6 +228,31 @@ public class CompanyDBDAO implements CompanyDAO {
 		}finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
+		
+	}
+
+	@Override
+	public void updateCompanyWithoutName(Company company) throws CouponSystemException {
+
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "update company set email = ?, password= ? where id = ? and name = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
+			pstmt.setString(1, company.getEmail());
+			pstmt.setString(2, company.getPassword());
+			pstmt.setInt(3, company.getId());
+			pstmt.setString(4, company.getName());
+			int rowCount = pstmt.executeUpdate();
+			if (rowCount == 0) {
+				throw new CouponSystemException("update Company failed - company " + company.getId() + " not found");
+			}
+		} catch (SQLException e) {
+
+			throw new CouponSystemException("update company failed", e);
+		} finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+
+	
 		
 	}
 

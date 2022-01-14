@@ -29,9 +29,9 @@ public class AdminFacade extends ClientFacade {
 	
 	public void updateCompany (Company company) throws CouponSystemException{
 		if (companyDAO.isCompanyExistsByIdOrName(company.getId(), company.getName())) {
-			throw new CouponSystemException("canot change the name or the password of the company") ;
+			companyDAO.updateCompanyWithoutName(company);
 		}else {
-			companyDAO.updateCompany(company);
+			throw new CouponSystemException("this company not exist");
 		}
 	}
 	
@@ -52,12 +52,11 @@ public class AdminFacade extends ClientFacade {
 		return companyDAO.getOneCompany(companyID);
 	}
 	
-	public int isCustomerExistsByEmail (Customer customer) throws CouponSystemException{
-		if ( customerDAO.isCustomerExistsByEmail(customer.getEmail())) {
+	public void addCustomer (Customer customer) throws CouponSystemException{
+		if ( customerDAO.isCustomerExistsByEmail(customer)) {
 			throw new CouponSystemException("customer with email " +customer.getEmail() + "already exists");
 		}else {
 			customerDAO.addCustomer(customer);
-			return customer.getId();
 		}
 	}
 	public void updateCustomer (Customer customer) throws CouponSystemException{

@@ -10,7 +10,7 @@ public interface CustomerDAO {
 
 	boolean isCustomerExists(String email, String Password) throws CouponSystemException;
 	
-	boolean isCustomerExistsByEmail(String email) throws CouponSystemException;
+	boolean isCustomerExistsByEmail(Customer customer) throws CouponSystemException;
 
 	int addCustomer(Customer customer) throws CouponSystemException;
 

@@ -20,6 +20,7 @@ public interface CompanyDAO {
 	int addCompany(Company company) throws CouponSystemException;
 
 	void updateCompany(Company company) throws CouponSystemException;
+	void updateCompanyWithoutName(Company company) throws CouponSystemException;
 	
 
 	void deleteCompany(int CompanyID) throws CouponSystemException;
