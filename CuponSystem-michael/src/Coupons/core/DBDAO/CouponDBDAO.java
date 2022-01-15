@@ -250,7 +250,7 @@ public class CouponDBDAO implements CouponDAO{
 	public void updateCouponWithoutCompanyID(Coupon coupon) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
 		String sql ="update coupon set  category = ?,  title = ?, description = ?,"
-				+ "startDate = ?,  endDate = ?, amount = ?, price = ?, image =? where id = ?";
+			+ " start_Date = ?,  end_Date = ?, amount = ?, price = ?, image =? where id = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setString(1, coupon.getCategory().toString());
 			pstmt.setString(2, coupon.getTitle());
@@ -261,7 +261,7 @@ public class CouponDBDAO implements CouponDAO{
 			pstmt.setDouble(7, coupon.getPrice());
 			pstmt.setString(8, coupon.getImage());
 			pstmt.setInt(9, coupon.getId());
-			int rowCount= pstmt.executeUpdate();
+			int rowCount = pstmt.executeUpdate();
 			if (rowCount == 0) {
 				throw new CouponSystemException("update coupon failed - coupon " + coupon.getId() + "not found");
 			}
@@ -288,4 +288,57 @@ public class CouponDBDAO implements CouponDAO{
 		
 	}
 
+	@Override
+	public boolean checkCompanyIDAndTitle(int companyID, String Title) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "select * from coupon where company_id = ? and title = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, companyID);
+			pstmt.setString(2, Title);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+			 
+		} catch (SQLException e) {
+			throw new CouponSystemException("checkCompanyIDAndTitle failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		
+	}
+
+	@Override
+	public List<Coupon> getAllCouponsWithCompanyID(int companyID) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql ="select * from coupon where company_id = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
+			List<Coupon> coupons = new ArrayList<>();
+		pstmt.setInt(1, companyID);
+		ResultSet rs = pstmt.executeQuery();
+		if (!rs.next()) {
+			throw new CouponSystemException("not found any coupon with company id " + companyID);
+		}
+		while (rs.next()) {
+			Coupon coupon = new Coupon();
+			coupon.setId(rs.getInt(1));
+			coupon.setCompanyID(rs.getInt(2));
+			coupon.setCategory(Category.valueOf(rs.getString(3)));
+			coupon.setTitle(rs.getString(4));
+			coupon.setDescription(rs.getString(5));
+			coupon.setStartDate(rs.getDate(6).toLocalDate());
+			coupon.setEndDate(rs.getDate(7).toLocalDate());
+			coupon.setAmount(rs.getInt(8));
+			coupon.setPrice(rs.getDouble(9));
+			coupon.setImage(rs.getString(10));
+			coupons.add(coupon);
+			
+		}
+		return coupons;
+		} catch (SQLException e) {
+			throw new CouponSystemException("getAllCouponsWithCompanyID failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+	}
+
+	
 }

@@ -8,8 +8,7 @@ import Coupons.core.exception.CouponSystemException;
 public interface CompanyDAO {
 
 	boolean isCompanyExists(String email, String Password) throws CouponSystemException;
-	boolean isCompanyExistsPassword(String Password) throws CouponSystemException;
-	boolean isCompanyExistsByEmail(String email) throws CouponSystemException;
+	
 
 	boolean isCompanyExistsByNameOrEmail(String name, String email) throws CouponSystemException;
 	
@@ -28,5 +27,7 @@ public interface CompanyDAO {
 	List<Company> getAllCompanies() throws CouponSystemException;
 
 	Company getOneCompany(int companyID) throws CouponSystemException;
+	
+	int getCompanyID (String email, String password) throws CouponSystemException;
 
 }

@@ -198,38 +198,8 @@ public class CompanyDBDAO implements CompanyDAO {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
 	}
-
-	@Override
-	public boolean isCompanyExistsPassword(String Password) throws CouponSystemException {
-		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "select * from company where password = ?";
-		try (PreparedStatement pstmt = con.prepareStatement(sql);){
-			pstmt.setString(1, Password);
-			ResultSet rs = pstmt.executeQuery();
-			return rs.next();
-		} catch (SQLException e) {
-			throw new CouponSystemException("isCompanyExistsPassword not found", e);
-		}finally {
-			ConnectionPool.getInstance().restoreConnection(con);
-		}
-		
-	}
-
-	@Override
-	public boolean isCompanyExistsByEmail(String email) throws CouponSystemException {
-		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "select * from company where email = ?";
-		try (PreparedStatement pstmt = con.prepareStatement(sql);){
-			pstmt.setString(1, email);
-			ResultSet rs = pstmt.executeQuery();
-			return rs.next();
-		} catch (SQLException e) {
-			throw new CouponSystemException("isCompanyExistsemail not found", e);
-		}finally {
-			ConnectionPool.getInstance().restoreConnection(con);
-		}
-		
-	}
+	
+	
 
 	@Override
 	public void updateCompanyWithoutName(Company company) throws CouponSystemException {
@@ -256,5 +226,27 @@ public class CompanyDBDAO implements CompanyDAO {
 		
 	}
 
+	@Override
+	public int getCompanyID(String email, String password) throws CouponSystemException {
+		 Connection con = ConnectionPool.getInstance().getConnection();
+		 String sql ="select id from company where email = ? and password = ?";
+		 try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setString(1, email);
+			pstmt.setString(2, password);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				 int id = rs.getInt("id");
+				 return id;
+			}else {
+				throw new CouponSystemException("inccorect email or password");
+			}
+			
+		} catch (SQLException e) {
+			throw new CouponSystemException("getCompanyID failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		
+	}	
 	
 }

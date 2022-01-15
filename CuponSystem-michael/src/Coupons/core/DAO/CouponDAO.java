@@ -8,6 +8,8 @@ import Coupons.core.exception.CouponSystemException;
 public interface CouponDAO {
 	
 	 int addCoupon (Coupon coupon) throws CouponSystemException;
+	 
+	 boolean checkCompanyIDAndTitle (int companyID , String Title) throws CouponSystemException;
 	
 	 void updateCoupon (Coupon coupon) throws CouponSystemException;
 	 
@@ -20,6 +22,8 @@ public interface CouponDAO {
 	
 	
 	 List<Coupon> getAllCoupons () throws CouponSystemException;
+	 
+	 List<Coupon> getAllCouponsWithCompanyID (int companyID) throws CouponSystemException;
 	
 	 Coupon getOneCoupon (int couponID) throws CouponSystemException;
 	
@@ -32,4 +36,6 @@ public interface CouponDAO {
 	 void deleteCouponPurchaseWithCompanyID (int companyID) throws CouponSystemException;
 
 	 void deleteCouponPurchaseWithCustomerID (int customerID) throws CouponSystemException;
+	 
+	 
 }
