@@ -11,9 +11,11 @@ public class App {
 		try (AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class)){
 			Vehicle v1 = ctx.getBean(Vehicle.class);
 			
+			
 			v1.start();
 			v1.goTo("eilat");
 			v1.stop();
+			
 		}
 
 	}
