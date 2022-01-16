@@ -247,6 +247,34 @@ public class CompanyDBDAO implements CompanyDAO {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
 		
+	}
+
+	@Override
+	public Company getCompanyDetailes(String email, String password) throws CouponSystemException {
+		 Connection con = ConnectionPool.getInstance().getConnection();
+		 String sql ="select * from company where email = ? and password = ?";
+		 try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setString(1, email);
+			pstmt.setString(2, password);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Company company = new Company();
+				company.setId(rs.getInt("id"));
+				company.setEmail(email);
+				company.setName(rs.getString("name"));
+				company.setPassword(password);
+				return company;
+			}
+			
+		} catch (SQLException e) {
+			throw new CouponSystemException("getCompanyDetailes failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		return null;
+		
+	
+		
 	}	
 	
 }

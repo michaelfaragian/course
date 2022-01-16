@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -314,9 +315,6 @@ public class CouponDBDAO implements CouponDAO{
 			List<Coupon> coupons = new ArrayList<>();
 		pstmt.setInt(1, companyID);
 		ResultSet rs = pstmt.executeQuery();
-		if (!rs.next()) {
-			throw new CouponSystemException("not found any coupon with company id " + companyID);
-		}
 		while (rs.next()) {
 			Coupon coupon = new Coupon();
 			coupon.setId(rs.getInt(1));
@@ -332,6 +330,9 @@ public class CouponDBDAO implements CouponDAO{
 			coupons.add(coupon);
 			
 		}
+		if (coupons.isEmpty()) {
+			throw new CouponSystemException("not exist any coupon from company "+companyID);
+		}
 		return coupons;
 		} catch (SQLException e) {
 			throw new CouponSystemException("getAllCouponsWithCompanyID failed", e);
@@ -339,6 +340,158 @@ public class CouponDBDAO implements CouponDAO{
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
 	}
+
+	@Override
+	public List<Coupon> getCouponsWithCompanyIDAndCategory(int companyID, Category category) throws CouponSystemException {
+
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql ="select * from coupon where company_id = ? and category = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
+			List<Coupon> coupons = new ArrayList<>();
+		pstmt.setInt(1, companyID);
+		pstmt.setString(2, category.toString());
+		ResultSet rs = pstmt.executeQuery();
+		while (rs.next()) {
+			Coupon coupon = new Coupon();
+			coupon.setId(rs.getInt(1));
+			coupon.setCompanyID(rs.getInt(2));
+			coupon.setCategory(Category.valueOf(rs.getString(3)));
+			coupon.setTitle(rs.getString(4));
+			coupon.setDescription(rs.getString(5));
+			coupon.setStartDate(rs.getDate(6).toLocalDate());
+			coupon.setEndDate(rs.getDate(7).toLocalDate());
+			coupon.setAmount(rs.getInt(8));
+			coupon.setPrice(rs.getDouble(9));
+			coupon.setImage(rs.getString(10));
+			coupons.add(coupon);
+			
+		}
+		if (coupons.isEmpty()) {
+			throw new CouponSystemException("not exist any coupon with this category from company "+companyID);
+		}
+		return coupons;
+		
+		} catch (SQLException e) {
+			throw new CouponSystemException("getCouponsWithCompanyIDAndCategory failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+	
+		
+	}
+
+	@Override
+	public List<Coupon> getCompanyCouponsByMaxPrice(int companyID, double maxPrice) throws CouponSystemException {
+
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql ="select * from coupon where company_id = ? and price < ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
+			List<Coupon> coupons = new ArrayList<>();
+		pstmt.setInt(1, companyID);
+		pstmt.setDouble(2, maxPrice);
+		ResultSet rs = pstmt.executeQuery();
+		while (rs.next()) {
+			Coupon coupon = new Coupon();
+			coupon.setId(rs.getInt(1));
+			coupon.setCompanyID(rs.getInt(2));
+			coupon.setCategory(Category.valueOf(rs.getString(3)));
+			coupon.setTitle(rs.getString(4));
+			coupon.setDescription(rs.getString(5));
+			coupon.setStartDate(rs.getDate(6).toLocalDate());
+			coupon.setEndDate(rs.getDate(7).toLocalDate());
+			coupon.setAmount(rs.getInt(8));
+			coupon.setPrice(rs.getDouble(9));
+			coupon.setImage(rs.getString(10));
+			coupons.add(coupon);
+			
+		}
+		if (coupons.isEmpty()) {
+			throw new CouponSystemException("not exist any coupon from company "+companyID+ " that the price less than "+ maxPrice);
+		}
+		return coupons;
+		
+		} catch (SQLException e) {
+			throw new CouponSystemException("getCouponsWithCompanyIDAndCategory failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+	
+	}
+
+	@Override
+	public boolean checkIfCustomerBuyThisCouponBefore(int customerID, int couponID) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "select * from customer_coupon where customer_id = ? and coupon_id =?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, customerID);
+			pstmt.setInt(2, couponID);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("checkIfCustomerBuyThisCouponBefore failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		
+	}
+
+	@Override
+	public boolean checkIfAmountLessThanOne( int couponID) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql ="select * from coupon where id = ? and amount < 1";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, couponID);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("checkIfAmountBigThanZero failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		
+	}
+
+	@Override
+	public void deleteFromAmount(int couponID) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql= "update coupon set amount = (amount - 1) where id = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+		pstmt.setInt(1, couponID);
+		pstmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new CouponSystemException("deleteFromAmount failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		
+	}
+
+//	@Override
+//	public void buyCoupon(int couponID, int CustomerID) throws CouponSystemException {
+//		Connection con = ConnectionPool.getInstance().getConnection();
+//		String Sql = "insert into customer_coupon values (?, ?)";
+//		try (PreparedStatement pstmt = con.prepareStatement(Sql);){
+//			pstmt.setInt(1, couponID);
+//			pstmt.setInt(2, CustomerID);
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	}
+
+//	@Override
+//	public boolean checkIfDatePast(LocalDate endDate, int couponID) throws CouponSystemException {
+//		Connection con = ConnectionPool.getInstance().getConnection();
+//		String sql ="select * from coupon where id = ? and end_date = ?";
+//		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
+//			pstmt.setInt(1, couponID);
+//			pstmt.setDate(2, endDate.isAfter(LocalDate.now()));
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 
 	
 }

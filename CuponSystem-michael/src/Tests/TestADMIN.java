@@ -1,4 +1,4 @@
-package a;
+package Tests;
 import java.time.LocalDate;
 
 import Coupons.core.DAO.CompanyDAO;
@@ -15,7 +15,7 @@ import Coupons.core.beans.Coupon.Category;
 import Coupons.core.beans.Customer;
 import Coupons.core.exception.CouponSystemException;
 
-public class Test {
+public class TestADMIN {
 
 
 
@@ -29,7 +29,7 @@ public class Test {
 			CustomerDAO cus = new CustomerDBDAO();
 			Company company = new Company(4, "michael", "michael@", "123456");
 			Customer customer = new Customer(1, "m", "f", "faragian@", "123");
-			Coupon coupon = new Coupon(2, 1, Category.FOOD, "faragian", "faragian", LocalDate.of(1999, 9, 12), LocalDate.of(2022, 1, 10), 1, 1, "michael");
+			Coupon coupon = new Coupon(0, 3, Category.ELECTRICITY, "mich", "f", LocalDate.of(1999, 9, 12), LocalDate.of(2022, 1, 10), 1, 1, "f");
 //		 	System.out.println(adminFacade.login("admin@admin.com", "admin"));
 		 	//System.out.println( adminFacade.addCompany(company));
 //		 	adminFacade.updateCompany(company);
@@ -43,7 +43,7 @@ public class Test {
 //			System.out.println(adminFacade.getOneCustomer(3));
 			System.out.println(companyFacade.login("michael@", "123456"));
 //			companyFacade.updateCoupon(coupon);
-//			companyFacade.addCoupon(coupon);
+			companyFacade.addCoupon(coupon);
 		
 		}
 

@@ -17,7 +17,7 @@ public class CustomerDBDAO implements CustomerDAO{
 	@Override
 	public boolean isCustomerExists(String email, String Password) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "select * from company where email = ? and password = ?";
+		String sql = "select * from customer where email = ? and password = ?";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
 			pstmt.setString(1, email);
 			pstmt.setString(2, Password);

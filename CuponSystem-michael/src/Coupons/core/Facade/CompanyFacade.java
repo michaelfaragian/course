@@ -3,7 +3,9 @@ package Coupons.core.Facade;
 import java.util.ArrayList;
 import java.util.List;
 
+import Coupons.core.beans.Company;
 import Coupons.core.beans.Coupon;
+import Coupons.core.beans.Coupon.Category;
 import Coupons.core.exception.CouponSystemException;
 
 public class CompanyFacade extends ClientFacade {
@@ -73,9 +75,22 @@ public class CompanyFacade extends ClientFacade {
 		couponDAO.deleteCouponPurchaseOnlyCouponID(couponID);
 		couponDAO.deleteCoupon(couponID);
 	}
-	public List<Coupon>  getAllCompanyCoupons() throws CouponSystemException{
+	public List<Coupon>  getCompanyCoupons() throws CouponSystemException{
 		int companyID = companyDAO.getCompanyID(email, password);
 		return (List<Coupon>)couponDAO.getAllCouponsWithCompanyID(companyID);
 	}
 
+	public List<Coupon> getCompanyCouponsByCategory(Category category) throws CouponSystemException{
+		int companyId = companyDAO.getCompanyID(email, password);
+		return couponDAO.getCouponsWithCompanyIDAndCategory(companyId, category);
+		
+	}
+	public List<Coupon> getCompanyCouponsByMaxPrice(double maxPrice) throws CouponSystemException{
+		int companyID = companyDAO.getCompanyID(email, password);
+		return couponDAO.getCompanyCouponsByMaxPrice(companyID, maxPrice);
+		
+	}
+	public Company getCompanyDetailes() throws CouponSystemException{
+		return companyDAO.getCompanyDetailes(email, password);
+	}
 }

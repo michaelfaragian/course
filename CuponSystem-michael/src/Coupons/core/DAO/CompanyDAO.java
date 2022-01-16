@@ -29,5 +29,7 @@ public interface CompanyDAO {
 	Company getOneCompany(int companyID) throws CouponSystemException;
 	
 	int getCompanyID (String email, String password) throws CouponSystemException;
+	
+	Company getCompanyDetailes (String email, String password) throws CouponSystemException;
 
 }
