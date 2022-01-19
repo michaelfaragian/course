@@ -30,6 +30,6 @@ public interface CompanyDAO {
 	
 	int getCompanyID (String email, String password) throws CouponSystemException;
 	
-	Company getCompanyDetailes (String email, String password) throws CouponSystemException;
+	Company getCompanyDetailes (int companyID) throws CouponSystemException;
 
 }

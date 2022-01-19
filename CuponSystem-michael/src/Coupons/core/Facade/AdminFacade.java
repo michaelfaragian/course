@@ -11,7 +11,6 @@ public class AdminFacade extends ClientFacade {
 	
 	public AdminFacade() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

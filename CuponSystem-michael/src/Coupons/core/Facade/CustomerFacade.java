@@ -1,7 +1,6 @@
 package Coupons.core.Facade;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import Coupons.core.beans.Coupon;
@@ -16,22 +15,20 @@ public class CustomerFacade extends ClientFacade {
 	public int getCustomerID() {
 		return customerID;
 	}
-	
-	
-
-//	public void setCustomerID(String email, String password) throws CouponSystemException  {
-//		try {
-//			this.customerID = customerDAO.getCustomerID(email, password);
-//		} catch (CouponSystemException e) {
-//			throw new CouponSystemException("this customer not exist", e);
-//		}
-//		
-//	
-//	}
-
-	
-	
+		
 	public void setCustomerID(int customerID) {
+		this.customerID = customerID;
+	}
+	
+	
+
+	public CustomerFacade() {
+		super();
+	}
+
+	
+	public CustomerFacade(int customerID) {
+		super();
 		this.customerID = customerID;
 	}
 
