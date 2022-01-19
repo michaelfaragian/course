@@ -18,10 +18,13 @@ public interface CustomerDAO {
 
 	void deleteCustomer(int CustomerID) throws CouponSystemException;
 	
-
 	List<Customer> getAllCustomers() throws CouponSystemException;
 
 	Customer getOneCustomer(int CustomerID) throws CouponSystemException;
+
+	int getCustomerID(String email, String password) throws CouponSystemException;
+	
+	Customer getCustomerDetails( int customerID) throws CouponSystemException;
 
 
 

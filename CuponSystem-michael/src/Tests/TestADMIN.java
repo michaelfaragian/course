@@ -41,9 +41,7 @@ public class TestADMIN {
 //			adminFacade.updateCustomer(customer);
 //			System.out.println(adminFacade.getAllCustomers());
 //			System.out.println(adminFacade.getOneCustomer(3));
-			System.out.println(companyFacade.login("michael@", "123456"));
-//			companyFacade.updateCoupon(coupon);
-			companyFacade.addCoupon(coupon);
+			
 		
 		}
 

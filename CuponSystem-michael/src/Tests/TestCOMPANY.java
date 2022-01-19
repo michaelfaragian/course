@@ -8,11 +8,14 @@ public class TestCOMPANY {
 
 	public static void main(String[] args) throws CouponSystemException {
 		
-		CompanyFacade companyFacade = new CompanyFacade("michael@", "123456");
-//		System.out.println(companyFacade.getCompanyCoupons());
-//		System.out.println(companyFacade.getCompanyCouponByCategory(Category.RESTAURANT));
-//		System.out.println(companyFacade.getCompanyCouponsByMaxPrice(2));
-		System.out.println(companyFacade.getCompanyDetailes());
+//		CompanyFacade companyFacade = new CompanyFacade("michael@", "123456");
+//		System.out.println(companyFacade.login("michael@", "123456"));
+////		companyFacade.updateCoupon(coupon);
+//		companyFacade.addCoupon(coupon);
+////		System.out.println(companyFacade.getCompanyCoupons());
+////		System.out.println(companyFacade.getCompanyCouponByCategory(Category.RESTAURANT));
+////		System.out.println(companyFacade.getCompanyCouponsByMaxPrice(2));
+//		System.out.println(companyFacade.getCompanyDetailes());
 
 	}
 

@@ -9,6 +9,8 @@ import java.util.List;
 
 import Coupons.core.DAO.ConnectionPool;
 import Coupons.core.DAO.CustomerDAO;
+import Coupons.core.Facade.CustomerFacade;
+import Coupons.core.beans.Company;
 import Coupons.core.beans.Customer;
 import Coupons.core.exception.CouponSystemException;
 
@@ -144,8 +146,6 @@ public class CustomerDBDAO implements CustomerDAO{
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
 	
-		
-		
 	}
 
 	@Override
@@ -161,6 +161,56 @@ public class CustomerDBDAO implements CustomerDAO{
 		}finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
+	}
+	@Override
+	public int getCustomerID(String email, String password) throws CouponSystemException {
+		 Connection con = ConnectionPool.getInstance().getConnection();
+		 String sql ="select id from customer where email = ? and password = ?";
+		 try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setString(1, email);
+			pstmt.setString(2, password);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				 int id = rs.getInt("id");
+				 return id;
+			}else {
+				throw new CouponSystemException("inccorect email or password");
+			}
+			
+		} catch (SQLException e) {
+			throw new CouponSystemException("getCustomeryID failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		
+	}
+
+	@Override
+	public Customer getCustomerDetails( int customerID) throws CouponSystemException {
+		 Connection con = ConnectionPool.getInstance().getConnection();
+		 String sql ="select * from customer where id = ?";
+		 try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, customerID);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Customer customer = new Customer();
+				customer.setId(rs.getInt(1));
+				customer.setFirstName(rs.getString(2));
+				customer.setLastName(rs.getString(3));
+				customer.setEmail(rs.getString(4));
+				customer.setPassword(rs.getString(5));
+				return customer;
+			}
+			
+		} catch (SQLException e) {
+			throw new CouponSystemException("getCustomerDetails failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		return null;
+		
+	
+		
 	}
 
 }

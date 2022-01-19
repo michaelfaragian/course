@@ -1,5 +1,6 @@
 package Coupons.core.DBDAO;
 
+import java.lang.reflect.GenericDeclaration;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -162,7 +163,7 @@ public class CouponDBDAO implements CouponDAO{
 	@Override
 	public void addCouponPurchase(int customerID, int couponID) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "insert into customer_coupon values (?, ?) ";
+		String sql = "insert into customer_coupon values (?,?) ";
 		try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setInt(1, customerID);
 			pstmt.setInt(2, couponID);
@@ -464,6 +465,112 @@ public class CouponDBDAO implements CouponDAO{
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
 		
+	}
+
+	@Override
+	
+	public List<Coupon> getCustomerCoupons(int customerID) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "select * from coupon where id in (select coupon_id from customer_coupon where customer_id = ?)";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, customerID);
+			List<Coupon> coupons = new ArrayList<>();
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Coupon coupon = new Coupon();
+				coupon.setId(rs.getInt(1));
+				coupon.setCompanyID(rs.getInt(2));
+				coupon.setCategory(Category.valueOf(rs.getString(3)));
+				coupon.setTitle(rs.getString(4));
+				coupon.setDescription(rs.getString(5));
+				coupon.setStartDate(rs.getDate(6).toLocalDate());
+				coupon.setEndDate(rs.getDate(7).toLocalDate());
+				coupon.setAmount(rs.getInt(8));
+				coupon.setPrice(rs.getDouble(9));
+				coupon.setImage(rs.getString(10));
+				coupons.add(coupon);
+			}
+			if (coupons.isEmpty()) {
+				throw new CouponSystemException("not exist any coupon from customer "+customerID);
+			}
+			return coupons;
+		
+		} catch (SQLException e) {
+			throw new CouponSystemException("getCustomerCoupons failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+	}
+
+	@Override
+	// String sql = "delete from customer_coupon where coupon_id in (select id from coupon where customer_id =?) ";
+	public List<Coupon> getCustomerCouponByIDAndCategory(int customerID, Category category) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "select * from coupon where id in (select coupon_id from customer_coupon where customer_id = ?) and category = ?;";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, customerID);
+			pstmt.setString(2, category.toString());
+			List<Coupon> coupons = new ArrayList<>();
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Coupon coupon = new Coupon();
+				coupon.setId(rs.getInt(1));
+				coupon.setCompanyID(rs.getInt(2));
+				coupon.setCategory(Category.valueOf(rs.getString(3)));
+				coupon.setTitle(rs.getString(4));
+				coupon.setDescription(rs.getString(5));
+				coupon.setStartDate(rs.getDate(6).toLocalDate());
+				coupon.setEndDate(rs.getDate(7).toLocalDate());
+				coupon.setAmount(rs.getInt(8));
+				coupon.setPrice(rs.getDouble(9));
+				coupon.setImage(rs.getString(10));
+				coupons.add(coupon);
+			}
+			if (coupons.isEmpty()) {
+				throw new CouponSystemException("not exist any coupon from category: " + category +" customer "+ customerID);
+			}
+			return coupons;
+		
+		} catch (SQLException e) {
+			throw new CouponSystemException("getCustomerCouponByIDAndCategory failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+	}
+
+	@Override
+	public List<Coupon> getCustomerCouponByIDAndmaxPrice(int customerID, float price) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "select * from coupon where id in (select coupon_id from customer_coupon where customer_id = ?) and price < ?;";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, customerID);
+			pstmt.setFloat(2, price);
+			List<Coupon> coupons = new ArrayList<>();
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Coupon coupon = new Coupon();
+				coupon.setId(rs.getInt(1));
+				coupon.setCompanyID(rs.getInt(2));
+				coupon.setCategory(Category.valueOf(rs.getString(3)));
+				coupon.setTitle(rs.getString(4));
+				coupon.setDescription(rs.getString(5));
+				coupon.setStartDate(rs.getDate(6).toLocalDate());
+				coupon.setEndDate(rs.getDate(7).toLocalDate());
+				coupon.setAmount(rs.getInt(8));
+				coupon.setPrice(rs.getDouble(9));
+				coupon.setImage(rs.getString(10));
+				coupons.add(coupon);
+			}
+			if (coupons.isEmpty()) {
+				throw new CouponSystemException("not exist any coupon under price: " + price +" customer "+ customerID);
+			}
+			return coupons;
+		
+		} catch (SQLException e) {
+			throw new CouponSystemException("getCustomerCouponByIDAndmaxPrice failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
 	}
 
 //	@Override

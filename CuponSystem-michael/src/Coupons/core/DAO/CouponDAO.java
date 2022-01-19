@@ -23,6 +23,8 @@ public interface CouponDAO {
 	 void deleteCoupon (int couponID) throws CouponSystemException;
 	
 	
+	 List<Coupon> getCustomerCoupons(int customerID) throws CouponSystemException;
+	 
 	 List<Coupon> getAllCoupons () throws CouponSystemException;
 	 
 	 List<Coupon> getAllCouponsWithCompanyID (int companyID) throws CouponSystemException;
@@ -48,6 +50,10 @@ public interface CouponDAO {
 	 boolean checkIfAmountLessThanOne(int couponID) throws CouponSystemException;
 	 
 	 void deleteFromAmount(int couponID) throws CouponSystemException;
+
+	List<Coupon> getCustomerCouponByIDAndCategory(int customerID, Category category) throws CouponSystemException;
+	
+	List<Coupon> getCustomerCouponByIDAndmaxPrice(int customerID, float price) throws CouponSystemException;
 	 
 //	 boolean checkIfDatePast (LocalDate endDate, int couponID) throws CouponSystemException;
 	 
