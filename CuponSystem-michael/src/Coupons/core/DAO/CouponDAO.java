@@ -39,6 +39,8 @@ public interface CouponDAO {
 	
 	 void deleteCouponPurchase (int customerID , int couponID) throws CouponSystemException;
 	 
+	 int deleteCouponPurchaseByEndDate (LocalDate date) throws CouponSystemException;
+	 
 	 void deleteCouponPurchaseOnlyCouponID ( int couponID) throws CouponSystemException;
 	 
 	 void deleteCouponPurchaseWithCompanyID (int companyID) throws CouponSystemException;

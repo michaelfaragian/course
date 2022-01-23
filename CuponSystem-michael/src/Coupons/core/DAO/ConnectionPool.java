@@ -24,6 +24,7 @@ public class ConnectionPool {
 	// singleton step 1 - define the single instance
 	private static ConnectionPool instance;
 
+	
 	// singleton step 2 - private CTOR prevents more creations
 	private ConnectionPool() throws SQLException {
 		// create connections and put in the set

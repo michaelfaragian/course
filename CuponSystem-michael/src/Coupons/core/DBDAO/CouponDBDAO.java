@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -571,6 +572,26 @@ public class CouponDBDAO implements CouponDAO{
 		}finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
+	}
+
+	@Override
+	public int deleteCouponPurchaseByEndDate(LocalDate date) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql = "delete from customer_coupon where end_date = ?";
+		try (PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);){
+			pstmt.setDate(1,Date.valueOf(date));
+			pstmt.executeUpdate();
+			ResultSet rs = pstmt.getGeneratedKeys();
+			rs.next();
+			int id = rs.getInt(2);
+			return id;
+		} catch (SQLException e) {
+			throw new CouponSystemException("delete Coupon Purchase By EndDate failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+			
+		
 	}
 
 //	@Override

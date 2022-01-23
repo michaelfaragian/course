@@ -1,5 +1,8 @@
 package Coupons.core.login;
 
+import java.sql.SQLException;
+
+import Coupons.core.DAO.ConnectionPool;
 import Coupons.core.Facade.AdminFacade;
 import Coupons.core.Facade.ClientFacade;
 import Coupons.core.Facade.CompanyFacade;
@@ -8,6 +11,17 @@ import Coupons.core.exception.CouponSystemException;
 
 public class LoginManager {
 	
+	
+	public LoginManager() {
+		super();
+	}
+	
+	private static LoginManager instance;
+	
+	public static LoginManager getInstance() throws CouponSystemException {
+		return instance;
+	}
+
 	public ClientFacade login (String email,String password, ClientType clientType) throws CouponSystemException {
 		AdminFacade adminFacade = new AdminFacade();	
 		CustomerFacade customerFacade = new CustomerFacade();	
@@ -27,12 +41,6 @@ public class LoginManager {
 			}
 		}
 		return null;
-	}
-	
-	public static void main(String[] args) throws CouponSystemException {
-		LoginManager loginManager = new LoginManager();
-		ClientFacade a = loginManager.login("michael@", "123", ClientType.CUSTOMER);
-		System.out.println(a);
-	}
-
-}
+	}	
+	}	
+		
