@@ -86,7 +86,7 @@ public class CouponDBDAO implements CouponDAO{
 			pstmt.setInt(1, couponID);
 			int rowCount = pstmt.executeUpdate();
 			if (rowCount == 0) {
-				throw new CouponSystemException("update Company failed - company " + couponID + " not found");
+				throw new CouponSystemException("delete coupon failed - coupon " + couponID + " not found");
 			}
 		} catch (SQLException e) {
 			throw new CouponSystemException("delete coupon failed", e);
@@ -575,51 +575,37 @@ public class CouponDBDAO implements CouponDAO{
 	}
 
 	@Override
-	public int deleteCouponPurchaseByEndDate(LocalDate date) throws CouponSystemException {
-		Connection con = ConnectionPool.getInstance().getConnection();
-		String sql = "delete from customer_coupon where end_date = ?";
-		try (PreparedStatement pstmt = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);){
-			pstmt.setDate(1,Date.valueOf(date));
-			pstmt.executeUpdate();
-			ResultSet rs = pstmt.getGeneratedKeys();
-			rs.next();
-			int id = rs.getInt(2);
-			return id;
+	public void deleteExpiredCouponsAndPurchase(LocalDate date) throws CouponSystemException {
+	 	Connection con = ConnectionPool.getInstance().getConnection();
+		String sql1 = "delete from customer_coupon where coupon_id in (select id from coupon where  end_date < ?);";
+	    try (PreparedStatement pstmt1 = con.prepareStatement(sql1)){
+			pstmt1.setDate(1,Date.valueOf(date));
+			pstmt1.executeUpdate();
 		} catch (SQLException e) {
-			throw new CouponSystemException("delete Coupon Purchase By EndDate failed", e);
+			throw new CouponSystemException("deleteExpiredCouponsAndPurchase failed", e);
 		}finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
-			
 		
 	}
 
-//	@Override
-//	public void buyCoupon(int couponID, int CustomerID) throws CouponSystemException {
-//		Connection con = ConnectionPool.getInstance().getConnection();
-//		String Sql = "insert into customer_coupon values (?, ?)";
-//		try (PreparedStatement pstmt = con.prepareStatement(Sql);){
-//			pstmt.setInt(1, couponID);
-//			pstmt.setInt(2, CustomerID);
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
+	@Override
+	public void deleteExpiredCouponsAndPurchase2(LocalDate date) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+	    String sql2 =  "delete from coupon where end_date < ?;";
+	    try (PreparedStatement pstmt2 = con.prepareStatement(sql2)){
+				pstmt2.setDate(1, Date.valueOf(date));
+				pstmt2.executeUpdate();
+		} catch (SQLException e) {
+			throw new CouponSystemException("deleteExpiredCouponsAndPurchase failed", e);
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		
+		
+	}
 
-//	@Override
-//	public boolean checkIfDatePast(LocalDate endDate, int couponID) throws CouponSystemException {
-//		Connection con = ConnectionPool.getInstance().getConnection();
-//		String sql ="select * from coupon where id = ? and end_date = ?";
-//		try (PreparedStatement pstmt = con.prepareStatement(sql);) {
-//			pstmt.setInt(1, couponID);
-//			pstmt.setDate(2, endDate.isAfter(LocalDate.now()));
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+	
 
 	
 }

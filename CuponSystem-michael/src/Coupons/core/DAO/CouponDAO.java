@@ -1,6 +1,8 @@
 package Coupons.core.DAO;
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import Coupons.core.beans.Coupon;
@@ -39,7 +41,8 @@ public interface CouponDAO {
 	
 	 void deleteCouponPurchase (int customerID , int couponID) throws CouponSystemException;
 	 
-	 int deleteCouponPurchaseByEndDate (LocalDate date) throws CouponSystemException;
+	 void deleteExpiredCouponsAndPurchase (LocalDate date) throws CouponSystemException;
+	 void deleteExpiredCouponsAndPurchase2 (LocalDate date) throws CouponSystemException;
 	 
 	 void deleteCouponPurchaseOnlyCouponID ( int couponID) throws CouponSystemException;
 	 
@@ -56,10 +59,8 @@ public interface CouponDAO {
 	List<Coupon> getCustomerCouponByIDAndCategory(int customerID, Category category) throws CouponSystemException;
 	
 	List<Coupon> getCustomerCouponByIDAndmaxPrice(int customerID, float price) throws CouponSystemException;
+
 	 
-//	 boolean checkIfDatePast (LocalDate endDate, int couponID) throws CouponSystemException;
-	 
-//	 void buyCoupon(int couponID, int CustomerID) throws CouponSystemException;
-	 
+
 	 
 }

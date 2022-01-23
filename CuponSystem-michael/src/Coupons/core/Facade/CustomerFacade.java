@@ -34,7 +34,12 @@ public class CustomerFacade extends ClientFacade {
 
 	@Override
 	public Boolean login(String email, String password) throws CouponSystemException {
-		return customerDAO.isCustomerExists(email, password);
+		if (customerDAO.isCustomerExists(email, password)) {
+			int id = customerDAO.getCustomerID(email, password);
+			this.customerID = id;
+			return true;			
+		}
+		return false;
 	}
 	
 	public void purchaseCoupon(Coupon coupon) throws CouponSystemException{

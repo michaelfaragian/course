@@ -33,7 +33,12 @@ public class CompanyFacade extends ClientFacade {
 	}
 
 	public Boolean login(String email, String password) throws CouponSystemException {
-		return companyDAO.isCompanyExists(email, password);
+		if(companyDAO.isCompanyExists(email, password)) {
+			int id = companyDAO.getCompanyID(email, password);
+			this.companyID = id;
+			return true;
+		}
+		return false;
 			
 	}
 	

@@ -252,7 +252,7 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public Company getCompanyDetailes(int companyID) throws CouponSystemException {
 		 Connection con = ConnectionPool.getInstance().getConnection();
-		 String sql ="select * from company id = ";
+		 String sql ="select * from company where id = ?";
 		 try (PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setInt(1, companyID);
 			ResultSet rs = pstmt.executeQuery();

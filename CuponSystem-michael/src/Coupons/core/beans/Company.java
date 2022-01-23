@@ -19,6 +19,7 @@ public class Company {
 		this.password = password;
 	}
 
+
 	public Company() {
 		super();
 	}

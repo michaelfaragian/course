@@ -61,9 +61,9 @@ public class AdminFacade extends ClientFacade {
 	public void updateCustomer (Customer customer) throws CouponSystemException{
 		customerDAO.updateCustomer(customer);
 	}
-	public void deleteCustomer(Customer customer) throws CouponSystemException{
-		couponDAO.deleteCouponPurchaseWithCustomerID(customer.getId());
-		customerDAO.deleteCustomer(customer.getId());
+	public void deleteCustomer(int customerId) throws CouponSystemException{
+		couponDAO.deleteCouponPurchaseWithCustomerID(customerId);
+		customerDAO.deleteCustomer(customerId);
 	}
 	
 	public List<Customer> getAllCustomers() throws CouponSystemException{

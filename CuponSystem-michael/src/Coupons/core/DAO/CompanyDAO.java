@@ -15,7 +15,7 @@ public interface CompanyDAO {
 	boolean isCompanyExistsByIdOrName(int id, String name) throws CouponSystemException;
 	boolean isCompanyExistsById(int id) throws CouponSystemException;
 	
-	
+
 	int addCompany(Company company) throws CouponSystemException;
 
 	void updateCompany(Company company) throws CouponSystemException;
