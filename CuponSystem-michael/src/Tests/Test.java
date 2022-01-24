@@ -1,6 +1,5 @@
 package Tests;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 import Coupons.core.DAO.ConnectionPool;
@@ -19,19 +18,33 @@ import Coupons.core.thread.CouponExpirationDalyJob;
 public class Test {
 	
 	Thread job = new Thread(new CouponExpirationDalyJob());
+	
 	public void testAll() {
 		try {
 			startProgram();
+			System.out.println("=====");
 //			adminTest();
 //			customerTest();
 //			companyTest();
-			
-			
-			closeProgram();
 		} catch (CouponSystemException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}finally {
+			System.out.println("===========");
+			 
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				closeProgram();
+			} catch (CouponSystemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
 	}
 	public void adminTest() throws CouponSystemException {
 		AdminFacade adminFacade = (AdminFacade) LoginManager.getInstance().login("admin@admin.com", "admin", ClientType.ADMINISTRATOR);
@@ -61,25 +74,24 @@ public class Test {
 
 	private void companyTest() throws CouponSystemException {
 		CompanyFacade companyFacade = (CompanyFacade) LoginManager.getInstance().login("michael@", "123456",ClientType.COMPANY);
-		System.out.println(companyFacade.getCompanyID());
-		companyFacade.addCoupon(new Coupon(0, 6, Category.VACATION, "new", "new", LocalDate.of(2022, 1, 23), LocalDate.of(2030, 10, 10), 30, 30, "new"));
-		companyFacade.deleteCoupon(7);
-		System.out.println(companyFacade.getCompanyCoupons());
-		System.out.println(companyFacade.getCompanyCouponsByCategory(Category.FOOD));
-		System.out.println(companyFacade.getCompanyCouponsByMaxPrice(50));
-		System.out.println(companyFacade.getCompanyDetailes()); 
-		companyFacade.updateCoupon(new Coupon(6, 3, Category.FOOD, "m", "m", LocalDate.of(1999, 9, 12), LocalDate.of(2022, 1, 10), 1, 1, "m"));
-		
-		
+//		System.out.println(companyFacade.getCompanyID());
+		companyFacade.addCoupon(new Coupon(0, 7, Category.VACATION, "new", "new", LocalDate.of(2022, 1, 23), LocalDate.of(2030, 10, 10), 30, 30, "new"));
+//		companyFacade.deleteCoupon(7);
+//		System.out.println(companyFacade.getCompanyCoupons());
+//		System.out.println(companyFacade.getCompanyCouponsByCategory(Category.FOOD));
+//		System.out.println(companyFacade.getCompanyCouponsByMaxPrice(50));
+//		System.out.println(companyFacade.getCompanyDetailes()); 
+//		companyFacade.updateCoupon(new Coupon(6, 3, Category.FOOD, "m", "m", LocalDate.of(1999, 9, 12), LocalDate.of(2022, 1, 10), 1, 1, "m"));	
 	}
-
-
+	
 	public void startProgram() throws CouponSystemException {
 		job.start();
 		ConnectionPool.getInstance();
 	}
-	public void closeProgram() throws CouponSystemException {
+	public void closeProgram() throws CouponSystemException   {
+		
 		job.interrupt();
+			
 		ConnectionPool.getInstance().closeAllConnections();
 	}
 }
