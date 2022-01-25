@@ -1,6 +1,6 @@
 package Tests;
 
-import Coupons.core.thread.CouponExpirationDalyJob;
+import Coupons.core.dalyJob.CouponExpirationDalyJob;
 
 public class TestThread {
 

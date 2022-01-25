@@ -1,6 +1,5 @@
-package Coupons.core.thread;
+package Coupons.core.dalyJob;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
