@@ -284,7 +284,7 @@ public class CouponDBDAO implements CouponDAO{
 			pstmt.setInt(1, couponID);
 			pstmt.executeQuery();
 		} catch (SQLException e) {
-			throw new CouponSystemException("deleteCouponPurchaseOnlyCouponID", e);
+			throw new CouponSystemException("deleteCouponPurchaseOnlyCouponID failed", e);
 		}finally {
 			ConnectionPool.getInstance().restoreConnection(con);
 		}
@@ -575,7 +575,7 @@ public class CouponDBDAO implements CouponDAO{
 	}
 
 	@Override
-	public void deleteExpiredCouponsAndPurchase(LocalDate date) throws CouponSystemException {
+	public void deleteExpiredCouponsFromCustomerCoupon(LocalDate date) throws CouponSystemException {
 	 	Connection con = ConnectionPool.getInstance().getConnection();
 		String sql1 = "delete from customer_coupon where coupon_id in (select id from coupon where  end_date < ?);";
 	    try (PreparedStatement pstmt1 = con.prepareStatement(sql1)){
@@ -590,7 +590,7 @@ public class CouponDBDAO implements CouponDAO{
 	}
 
 	@Override
-	public void deleteExpiredCouponsAndPurchase2(LocalDate date) throws CouponSystemException {
+	public void deleteExpiredCouponsFromCoupon(LocalDate date) throws CouponSystemException {
 		Connection con = ConnectionPool.getInstance().getConnection();
 	    String sql2 =  "delete from coupon where end_date < ?;";
 	    try (PreparedStatement pstmt2 = con.prepareStatement(sql2)){
@@ -603,6 +603,24 @@ public class CouponDBDAO implements CouponDAO{
 		}
 		
 		
+	}
+
+	@Override
+	public boolean checkIfexistiInPurchaseCoupon(int couponID) throws CouponSystemException {
+		Connection con = ConnectionPool.getInstance().getConnection();
+		String sql ="select * from customer_coupon where coupon_id = ? ";
+		try (PreparedStatement pstmt = con.prepareStatement(sql);){
+			pstmt.setInt(1, couponID);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			System.out.println("no one by this coupon");
+		}finally {
+			ConnectionPool.getInstance().restoreConnection(con);
+		}
+		return false;
 	}
 
 	

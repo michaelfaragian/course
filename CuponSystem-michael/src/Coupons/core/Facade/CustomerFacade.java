@@ -43,7 +43,6 @@ public class CustomerFacade extends ClientFacade {
 	}
 	
 	public void purchaseCoupon(Coupon coupon) throws CouponSystemException{
-		int customerID = 4;
 		if (couponDAO.checkIfCustomerBuyThisCouponBefore(customerID, coupon.getId())) {
 			throw new CouponSystemException("the customer :"+ customerID +"allrady buy coupon "+coupon.getId());
 		}else if (couponDAO.checkIfAmountLessThanOne(coupon.getId())){

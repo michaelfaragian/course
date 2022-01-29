@@ -41,8 +41,8 @@ public interface CouponDAO {
 	
 	 void deleteCouponPurchase (int customerID , int couponID) throws CouponSystemException;
 	 
-	 void deleteExpiredCouponsAndPurchase (LocalDate date) throws CouponSystemException;
-	 void deleteExpiredCouponsAndPurchase2 (LocalDate date) throws CouponSystemException;
+	 void deleteExpiredCouponsFromCustomerCoupon (LocalDate date) throws CouponSystemException;
+	 void deleteExpiredCouponsFromCoupon (LocalDate date) throws CouponSystemException;
 	 
 	 void deleteCouponPurchaseOnlyCouponID ( int couponID) throws CouponSystemException;
 	 
@@ -53,6 +53,7 @@ public interface CouponDAO {
 	 boolean checkIfCustomerBuyThisCouponBefore(int customerID, int couponID) throws CouponSystemException;
 	 
 	 boolean checkIfAmountLessThanOne(int couponID) throws CouponSystemException;
+	 boolean checkIfexistiInPurchaseCoupon(int couponID) throws CouponSystemException;
 	 
 	 void deleteFromAmount(int couponID) throws CouponSystemException;
 

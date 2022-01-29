@@ -17,8 +17,8 @@ public class CouponExpirationDalyJob  implements Runnable{
 	@Override
 	public void run() {
 		try {
-			couponDBDAO.deleteExpiredCouponsAndPurchase(LocalDate.now());
-			couponDBDAO.deleteExpiredCouponsAndPurchase2(LocalDate.now());
+			couponDBDAO.deleteExpiredCouponsFromCustomerCoupon(LocalDate.now());
+			couponDBDAO.deleteExpiredCouponsFromCoupon(LocalDate.now());
 			try {
 				TimeUnit.DAYS.sleep(1);
 			} catch (InterruptedException e) {
