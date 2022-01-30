@@ -24,7 +24,6 @@ public class ConnectionPool {
 	// singleton step 1 - define the single instance
 	private static ConnectionPool instance;
 
-	
 	// singleton step 2 - private CTOR prevents more creations
 	private ConnectionPool() throws SQLException {
 		// create connections and put in the set
@@ -76,26 +75,25 @@ public class ConnectionPool {
 
 	public synchronized void closeAllConnections() throws CouponSystemException {
 		open = false;
-		while(connections.size() < SIZE) {
+		while (connections.size() < SIZE) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			// if we are here all connections are in pool
-			
+
 			for (Connection connection : connections) {
 				try {
 					connection.close();
-				} 
-				catch (SQLException e) {
+				} catch (SQLException e) {
 					throw new CouponSystemException("closeAllConnections failed", e);
-				
-			}
-				this.connections.clear(); // 
+
+				}
+				this.connections.clear(); //
 			}
 		}
-		
+
 	}
 
 }

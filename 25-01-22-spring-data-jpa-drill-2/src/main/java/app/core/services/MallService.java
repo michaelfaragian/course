@@ -50,9 +50,17 @@ public class MallService {
 	public void deleteStore (int storeId) {
 		storeRepo.deleteById(storeId);
 	}
-	public int addProductToStore(int storeID, Product product) {
-		storeRepo.saveProductByStore(storeID, product);
+	public int addProductToStore(Product product) {
+		productRepo.save(product);
 		return product.getId();
+	}
+	public Product getProduct(int productId) {
+		Optional<Product> opt = productRepo.findById(productId);
+		if(opt.isEmpty()) {
+			throw new RuntimeException("getProduct failed product "+productId+" not exist");
+		}else {
+			return productRepo.getById(productId);
+		}
 	}
 
 }

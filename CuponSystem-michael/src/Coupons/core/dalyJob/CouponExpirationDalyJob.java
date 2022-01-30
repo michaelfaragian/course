@@ -6,13 +6,9 @@ import java.util.concurrent.TimeUnit;
 import Coupons.core.DBDAO.CouponDBDAO;
 import Coupons.core.exception.CouponSystemException;
 
-public class CouponExpirationDalyJob  implements Runnable{
-	
-	private CouponDBDAO couponDBDAO = new CouponDBDAO(); 
-	
+public class CouponExpirationDalyJob implements Runnable {
 
-
-
+	private CouponDBDAO couponDBDAO = new CouponDBDAO();
 
 	@Override
 	public void run() {
@@ -26,6 +22,6 @@ public class CouponExpirationDalyJob  implements Runnable{
 			}
 		} catch (CouponSystemException e) {
 			System.out.println(e.getMessage());
-		}	
+		}
 	}
 }

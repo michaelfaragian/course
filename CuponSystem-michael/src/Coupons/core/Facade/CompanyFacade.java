@@ -51,13 +51,12 @@ public class CompanyFacade extends ClientFacade {
 		couponDAO.updateCouponWithoutCompanyID(coupon);
 	}
 
-	public void deleteCoupon (int couponID) throws CouponSystemException{
-		if(couponDAO.checkIfexistiInPurchaseCoupon(couponID)) {			
+	public void deleteCoupon(int couponID) throws CouponSystemException {
+		if (couponDAO.checkIfexistiInPurchaseCoupon(couponID)) {
 			couponDAO.deleteCouponPurchaseOnlyCouponID(couponID);
-		} 
-			couponDAO.deleteCoupon(couponID);			
 		}
-	
+		couponDAO.deleteCoupon(couponID);
+	}
 
 	public List<Coupon> getCompanyCoupons() throws CouponSystemException {
 		return (List<Coupon>) couponDAO.getAllCouponsWithCompanyID(companyID);

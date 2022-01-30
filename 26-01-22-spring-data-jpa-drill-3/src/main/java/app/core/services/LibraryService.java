@@ -33,8 +33,10 @@ public class LibraryService {
 	} 
 	
 	public void addBookToLibrary(Book book,int libraryId) {
-		Optional<Library> opt = libraryRepo.findById(libraryId);
-		if(opt.isPresent()) {
+		if(libraryRepo.existsById(libraryId)) {
+			Library library = libraryRepo.findById(libraryId).get();
+			library.se
+			book.setLibraryId(libraryId);
 			bookRepo.save(book);
 		}else {
 			System.out.println("ERROR: library "+ libraryId + " not found");

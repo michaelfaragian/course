@@ -1,8 +1,7 @@
 package Coupons.core.exception;
 
 public class CouponSystemException extends Exception {
-	
-	
+
 	private static final long serialVersionUID = 1L;
 
 	public CouponSystemException() {
@@ -26,6 +25,4 @@ public class CouponSystemException extends Exception {
 		super(cause);
 	}
 
-	
-	
 }

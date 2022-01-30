@@ -3,6 +3,7 @@ package app.core.entities;
 import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,10 +23,14 @@ import lombok.ToString;
 @Entity
 public class Book {
 	
+	public void setLibraryId(int libraryId) {
+		this.library.setId(libraryId);
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(nullable = false)
 	private String title;
 	private String author;
 	private LocalDate publication;
@@ -33,4 +38,8 @@ public class Book {
 	@JoinColumn(name = "library_id")
 	private Library library;
 
+	
+//	public void setLibraryId(int libraryId) {
+//	
+//	}
 }

@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class Company {
-	
+
 	private int id;
 	private String name;
 	private String email;
 	private String password;
-	private List<Coupon> coupons; 
-	
+	private List<Coupon> coupons;
+
 	public Company(int id, String name, String email, String password) {
 		super();
 		this.id = id;
@@ -18,7 +18,6 @@ public class Company {
 		this.email = email;
 		this.password = password;
 	}
-
 
 	public Company() {
 		super();
@@ -85,10 +84,5 @@ public class Company {
 	public void setCoupons(List<Coupon> coupons) {
 		this.coupons = coupons;
 	}
-	
-	
-	
-	
-	
 
 }

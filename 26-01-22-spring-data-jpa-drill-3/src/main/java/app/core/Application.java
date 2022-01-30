@@ -25,11 +25,11 @@ public class Application {
 		libraryService.addLibrary(library2);
 		
 		for (int i = 0; i < 11; i++) {
-			Book book1 = new Book(i, "aaa", "aaa", LocalDate.now(),null);
-			libraryService.addBookToLibrary(book1, library1.getId());
+			Book book1 = new Book(0, "aaa", "aaa", LocalDate.now(),null);
+			libraryService.addBookToLibrary(book1, 1);
 		}
 		for (int i = 0; i < 11; i++) {
-			Book book2 = new Book(i, "bbb", "bbb", LocalDate.now(),null);
+			Book book2 = new Book(0, "bbb", "bbb", LocalDate.now(),null);
 			libraryService.addBookToLibrary(book2, library2.getId());
 			
 		}

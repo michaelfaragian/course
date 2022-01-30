@@ -21,7 +21,7 @@ public class Application {
 //		mallService.getAllStoresInmall();
 //		mallService.updateStore(store);
 //		mallService.deleteStore(3);
-		mallService.addProductToStore(1, product);
+		mallService.addProductToStore(product);
 		
 		
 		

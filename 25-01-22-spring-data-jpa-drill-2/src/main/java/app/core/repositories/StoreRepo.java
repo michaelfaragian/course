@@ -11,6 +11,6 @@ public interface StoreRepo extends JpaRepository<Store, Integer> {
 	
 	List<Store> findAll();
 
-	void saveProductByStore(int storeID, Product product);
+//	void saveProductByStore(int storeID, Product product);
 
 }

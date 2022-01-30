@@ -9,17 +9,11 @@ import Coupons.core.DBDAO.CustomerDBDAO;
 import Coupons.core.exception.CouponSystemException;
 
 public abstract class ClientFacade {
-	
+
 	protected CompanyDAO companyDAO = new CompanyDBDAO();
 	protected CustomerDAO customerDAO = new CustomerDBDAO();
 	protected CouponDAO couponDAO = new CouponDBDAO();
-	
-	
-	
-	public abstract Boolean login (String email, String password) throws CouponSystemException;
-	
 
-	
-	
+	public abstract Boolean login(String email, String password) throws CouponSystemException;
 
 }

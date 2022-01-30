@@ -6,7 +6,7 @@ public class Program {
 
 		Test test = new Test();
 		test.testAll();
-		
+
 	}
 
 }
