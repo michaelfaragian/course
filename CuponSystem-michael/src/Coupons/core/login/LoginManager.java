@@ -1,7 +1,7 @@
 package Coupons.core.login;
 
 import Coupons.core.Facade.AdminFacade;
-import Coupons.core.Facade.ClientFacade;
+import Coupons.core.Facade.ClientService;
 import Coupons.core.Facade.CompanyFacade;
 import Coupons.core.Facade.CustomerFacade;
 import Coupons.core.exception.CouponSystemException;
@@ -18,10 +18,10 @@ public class LoginManager {
 		return instance;
 	}
 
-	public ClientFacade login(String email, String password, ClientType clientType) throws CouponSystemException {
+	public ClientService login(String email, String password, ClientType clientType) throws CouponSystemException {
 
 		if (clientType == ClientType.ADMINISTRATOR) {
-			AdminFacade adminFacade = new AdminFacade();
+			AdminService adminService = new AdminFacade();
 			if (adminFacade.login(email, password)) {
 				return adminFacade;
 			}

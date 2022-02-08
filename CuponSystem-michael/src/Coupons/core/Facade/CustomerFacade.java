@@ -8,7 +8,7 @@ import Coupons.core.beans.Coupon.Category;
 import Coupons.core.beans.Customer;
 import Coupons.core.exception.CouponSystemException;
 
-public class CustomerFacade extends ClientFacade {
+public class CustomerFacade extends ClientService {
 
 	private int customerID;
 

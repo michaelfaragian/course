@@ -6,7 +6,7 @@ import Coupons.core.beans.Company;
 import Coupons.core.beans.Customer;
 import Coupons.core.exception.CouponSystemException;
 
-public class AdminFacade extends ClientFacade {
+public class AdminFacade extends ClientService {
 
 	public AdminFacade() {
 		super();

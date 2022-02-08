@@ -8,7 +8,7 @@ import Coupons.core.DBDAO.CouponDBDAO;
 import Coupons.core.DBDAO.CustomerDBDAO;
 import Coupons.core.exception.CouponSystemException;
 
-public abstract class ClientFacade {
+public abstract class ClientService {
 
 	protected CompanyDAO companyDAO = new CompanyDBDAO();
 	protected CustomerDAO customerDAO = new CustomerDBDAO();
