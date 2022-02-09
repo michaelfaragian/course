@@ -32,7 +32,7 @@ public class CompanyService extends ClientService {
 			return false;
 		}
 		companyId = company.getId();
-		return companyRepo.existsByNameAndEmail(password, email);
+		return companyRepo.existsByPasswordAndEmail(password, email);
 	}
 	
 	public Company findCompanyById(int companyId) throws CouponSystemException {

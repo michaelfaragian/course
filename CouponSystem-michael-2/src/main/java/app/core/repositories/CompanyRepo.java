@@ -12,7 +12,7 @@ public interface CompanyRepo extends JpaRepository<Company, Integer> {
 	
 	boolean existsByNameOrEmail (String name, String Email);
 	
-	boolean existsByNameAndEmail (String name, String Email);
+	boolean existsByPasswordAndEmail (String name, String Email);
 	
 	Company findByNameAndEmail (String name, String Email);
 
