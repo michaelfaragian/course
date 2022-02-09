@@ -12,21 +12,15 @@ import app.core.repositories.CouponRepo;
 import app.core.services.AdminService;
 
 @Component
-//@Transactional
 public class CouponExpirationDalyJob  {
 	
 	@Autowired
 	AdminService adminService;
-//	@Autowired
-//	CouponRepo couponRepo;
 	
 	@Scheduled(cron = "1 0 0 * * *")
 	public void deleteExpiredCoupons() {
 		adminService.deleteExpiredCouponsByEndDate();
 	}
-//	public void deleteExpiredCoupons() {
-//		couponRepo.deleteByEndDateBefore(LocalDate.now());
-//	}
 	
 
 }

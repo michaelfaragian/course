@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,12 +13,17 @@ import app.core.entities.Coupon.Category;
 import app.core.entities.Customer;
 import app.core.exception.CouponSystemException;
 
+@Scope("prototype")
 @Transactional
 @Service
 public class CustomerService extends ClientService {
 	
 	private int customerId;
+	
 
+	public int getCustomerId() {
+		return customerId;
+	}
 	@Override
 	public Boolean login(String email, String password)  {
 		Customer customer = customerRepo.findByEmailAndPassword(email, password);

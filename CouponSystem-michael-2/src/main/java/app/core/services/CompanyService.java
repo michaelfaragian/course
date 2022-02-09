@@ -3,6 +3,7 @@ package app.core.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,11 +11,8 @@ import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.entities.Coupon.Category;
 import app.core.exception.CouponSystemException;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-
+@Scope("prototype")
 @Transactional
 @Service
 public class CompanyService extends ClientService {
@@ -26,9 +24,6 @@ public class CompanyService extends ClientService {
 		return companyId;
 	}
 
-	public void setCompanyId(int companyId) {
-		this.companyId = companyId;
-	}
 
 	@Override
 	public Boolean login(String email, String password) {
@@ -40,22 +35,6 @@ public class CompanyService extends ClientService {
 		return companyRepo.existsByNameAndEmail(password, email);
 	}
 	
-	public int addCoupon(Coupon coupon) throws CouponSystemException{
-		if (couponRepo.existsByTitleAndCompanyId(coupon.getTitle(), companyId)) {
-			throw new CouponSystemException("addCoupon failed - company "+coupon.getCompany().getId()+" already have title "+coupon.getTitle());
-		}else {
-			Optional<Company> opt = companyRepo.findById(companyId);
-			if(opt.isEmpty()) {
-				throw new CouponSystemException("findById failed - not found");
-			}else {
-				Company company= opt.get();
-				company.addCoupon(coupon);
-				return coupon.getId();
-				
-			}
-		}
-	}
-	
 	public Company findCompanyById(int companyId) throws CouponSystemException {
 		Optional<Company> opt = companyRepo.findById(companyId);
 		if(opt.isPresent()) {
@@ -64,6 +43,27 @@ public class CompanyService extends ClientService {
 			throw new CouponSystemException("findCompanyById failed - company with id "+companyId+" not found");
 		}
 	}
+	public int addCoupon(Coupon coupon) throws CouponSystemException{
+		if (couponRepo.existsByTitleAndCompanyId(coupon.getTitle(), companyId)) {
+			throw new CouponSystemException("addCoupon failed - company "+coupon.getCompany().getId()+" already have title "+coupon.getTitle());
+		}else {
+			Company company = null;
+			Optional<Company> opt = companyRepo.findById(coupon.getCompany().getId());
+			if(opt.isPresent()) {
+				company= opt.get();				
+			}else {
+				throw new CouponSystemException("addCoupon- findById failed - company with id "+coupon.getCompany().getId()+" not found");
+			}
+			if(company.getId() != companyId) {
+				throw new CouponSystemException("addCoupon failed - you must enter your companyId");
+			}else {
+				company.addCoupon(coupon);
+				return coupon.getId();
+				
+			}
+		}
+	}
+	
 	
 	public int updateCoupon(Coupon coupon) throws CouponSystemException {
 		if(couponRepo.existsByIdAndCompanyId(coupon.getId(),companyId)) {
