@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import app.core.exception.CouponSystemException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,6 +38,7 @@ public class Company {
 	private String password;
 		
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Coupon> coupons;
 	
 	
