@@ -25,7 +25,8 @@ public class AdminService extends ClientService {
 			throw new CouponSystemException("addCompany failed - already exist company with name: " + company.getName()+" or by email: "+ company.getEmail());
 		}else {
 			companyRepo.save(company);
-			return company.getId();			
+			Company companyFromDb  = companyRepo.findCompanyByEmailAndPassword(company.getEmail(), company.getPassword());
+			return companyFromDb.getId();			
 		}
 	}
 	
@@ -68,7 +69,8 @@ public class AdminService extends ClientService {
 			throw new CouponSystemException("addCustomer failed - customer with Email " + customer.getEmail()+" already exist");
 		}else {
 			customerRepo.save(customer);
-			return customer.getId();
+			Customer customer2 = customerRepo.findByEmailAndPassword(customer.getEmail(), customer.getPassword());
+			return customer2.getId();
 		}
 	}
 	public int updateCustomer(Customer customer) throws CouponSystemException {
@@ -80,12 +82,13 @@ public class AdminService extends ClientService {
 			throw new CouponSystemException("updateCustomer failed - customer with id " + customer.getId()+ " not exist");
 		}
 	}
-	public int deleteCustomer(int customerid) throws CouponSystemException {
-		try {
-			customerRepo.deleteById(customerid);
-			return customerid;			
-		}catch (Exception e) {
-			throw new CouponSystemException("deleteCustomer failed");
+	public int deleteCustomer(int customerId) throws CouponSystemException {
+		Optional<Customer> opt = customerRepo.findById(customerId);
+		if(opt.isPresent()) {
+			customerRepo.deleteById(customerId);
+			return customerId;			
+		}else {
+			throw new CouponSystemException("deleteCustomer failed - customer " + customerId+" not exist");
 		}
 	}
 	public List<Customer> getAllCustomers(){
