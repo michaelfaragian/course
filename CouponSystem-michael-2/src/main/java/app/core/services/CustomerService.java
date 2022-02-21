@@ -2,7 +2,6 @@ package app.core.services;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -17,53 +16,56 @@ import app.core.exception.CouponSystemException;
 @Transactional
 @Service
 public class CustomerService extends ClientService {
-	
+
 	private int customerId;
-	
 
 	public int getCustomerId() {
 		return customerId;
 	}
+
 	@Override
-	public Boolean login(String email, String password)  {
+	public Boolean login(String email, String password) {
 		Customer customer = customerRepo.findByEmailAndPassword(email, password);
-		if(customer == null) {
+		if (customer == null) {
 			return false;
-		}else {
+		} else {
 			customerId = customer.getId();
-		return customerRepo.existsByEmailAndPassword(email, password);
+			return customerRepo.existsByEmailAndPassword(email, password);
 		}
 	}
-	public void purchaseCoupon (int couponId) throws CouponSystemException {
+
+	public void purchaseCoupon(int couponId) throws CouponSystemException {
 		Customer customer = customerRepo.getById(customerId);
 		Coupon couponFromDb = couponRepo.getById(couponId);
-		if(customer.getCoupons().contains(couponFromDb)){
-			throw new CouponSystemException("purchaseCoupon failed - coupon with id "+couponId+" already buy by customer "+customerId);
+		if (customer.getCoupons().contains(couponFromDb)) {
+			throw new CouponSystemException(
+					"purchaseCoupon failed - coupon with id " + couponId + " already buy by customer " + customerId);
 		}
-		if(couponFromDb.getAmount()<1) {
-			throw new CouponSystemException("purchaseCoupon failed - coupon with id "+couponId+" less than 1");
+		if (couponFromDb.getAmount() < 1) {
+			throw new CouponSystemException("purchaseCoupon failed - coupon with id " + couponId + " less than 1");
 		}
-		if(couponFromDb.getEndDate().isBefore(LocalDate.now())) {
-			throw new CouponSystemException("purchaseCoupon failed -  date coupon "+couponId+" alredy expired");
-		}
-		else {
-			couponFromDb.setAmount(couponFromDb.getAmount()-1);
+		if (couponFromDb.getEndDate().isBefore(LocalDate.now())) {
+			throw new CouponSystemException("purchaseCoupon failed -  date coupon " + couponId + " alredy expired");
+		} else {
+			couponFromDb.setAmount(couponFromDb.getAmount() - 1);
 			customer.addCoupon(couponFromDb);
 		}
 	}
-	public List<Coupon> getAllCustomerCoupon(){
+
+	public List<Coupon> getAllCustomerCoupon() {
 		return couponRepo.findByCustomersId(customerId);
 	}
-	public List<Coupon> getCustomerCouponByCategory(Category category){
+
+	public List<Coupon> getCustomerCouponByCategory(Category category) {
 		return couponRepo.findByCustomersIdAndCategory(customerId, category);
 	}
-	public List<Coupon> getCustomerCouponByMaxPrice(double MaxPrice){
+
+	public List<Coupon> getCustomerCouponByMaxPrice(double MaxPrice) {
 		return couponRepo.findByCustomersIdAndPriceLessThan(customerId, MaxPrice);
 	}
-	public Customer getCustomerDetails(){
-		return customerRepo.findById(customerId).get(); 
+
+	public Customer getCustomerDetails() {
+		return customerRepo.findById(customerId).get();
 	}
 
-	
 }
-

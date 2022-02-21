@@ -18,7 +18,7 @@ import app.core.exception.CouponSystemException;
 @Service
 public class CustomerService extends ClientService {
 	
-	private int customerId;
+	private int customerId = 1;
 	
 
 	public int getCustomerId() {
@@ -36,7 +36,12 @@ public class CustomerService extends ClientService {
 	}
 	public void purchaseCoupon (int couponId) throws CouponSystemException {
 		Customer customer = customerRepo.getById(customerId);
-		Coupon couponFromDb = couponRepo.getById(couponId);
+		Optional<Coupon> opt = couponRepo.findById(couponId);
+		if(opt.isEmpty()) {
+			throw new CouponSystemException("purchaseCoupon failed - coupon "+couponId+" not exist");
+		}
+		Coupon couponFromDb = opt.get();	
+		
 		if(customer.getCoupons().contains(couponFromDb)){
 			throw new CouponSystemException("purchaseCoupon failed - coupon with id "+couponId+" already buy by customer "+customerId);
 		}

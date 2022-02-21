@@ -66,6 +66,9 @@ public class CompanyService extends ClientService {
 	}
 
 	public int updateCoupon(Coupon coupon) throws CouponSystemException {
+		if (coupon.getCompany().getId() != companyId) {
+			throw new CouponSystemException("addCoupon failed - you must enter your companyId");
+		}
 		if (couponRepo.existsByIdAndCompanyId(coupon.getId(), companyId)) {
 			couponRepo.save(coupon);
 			return coupon.getId();
@@ -92,7 +95,7 @@ public class CompanyService extends ClientService {
 		return couponRepo.findByCompanyIdAndCategory(companyId, category);
 	}
 
-	public List<Coupon> getCompanyCouponsByMaxPrice(int maxPrice) {
+	public List<Coupon> getCompanyCouponsByMaxPrice(double maxPrice) {
 		return couponRepo.findByCompanyIdAndPriceLessThan(companyId, maxPrice);
 	}
 

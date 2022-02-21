@@ -3,9 +3,8 @@ package app.core.tests;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import app.core.entities.Company;
@@ -20,12 +19,17 @@ import app.core.services.CompanyService;
 import app.core.services.CustomerService;
 
 @Component
-public class Test {
+public class Test implements CommandLineRunner {
 
 	@Autowired
 	LoginManager loginManager;
 
-	@PostConstruct
+	@Override
+	public void run(String... args) throws Exception {
+		testAll();
+
+	}
+
 	public void testAll() throws CouponSystemException {
 		testAdminService();
 		testCompanyService();
@@ -38,14 +42,15 @@ public class Test {
 		System.out.println();
 		System.out.println();
 		System.out.println();
-		
+
 		System.out.println("\t \t >>> adminTest start <<< ");
 		System.out.println("--------------------------------------------------");
 		System.out.println();
-		AdminService adminService = (AdminService) loginManager.login("admin@admin.com", "admin", ClientType.ADMINISTRATOR);
+		AdminService adminService = (AdminService) loginManager.login("admin@admin.com", "admin",
+				ClientType.ADMINISTRATOR);
 		Company company1 = new Company(0, "aaa", "aaa@", "aaa", null);
-		Company company2 = new Company(0, "bbb", "bbb@", "bbb",null);
-		Company company3 = new Company(0, "ccc", "ccc@", "ccc",null);
+		Company company2 = new Company(0, "bbb", "bbb@", "bbb", null);
+		Company company3 = new Company(0, "ccc", "ccc@", "ccc", null);
 		adminService.addCompany(company1);
 		System.out.println("company added: " + company1);
 		System.out.println();
@@ -78,16 +83,16 @@ public class Test {
 		}
 		System.out.println("-------------------------------------");
 		System.out.println();
-		adminService.updateCompany(new Company(1, "aaa", "zzz@", "zzz",null));
+		adminService.updateCompany(new Company(1, "aaa", "zzz@", "zzz", null));
 		System.out.println("update company 1 succeeded");
 		System.out.println("---------------------------------------");
 		System.out.println();
 		System.out.println(">>>> get one company: ");
 		System.out.println(adminService.getOneCompany(1));
 		System.out.println();
-		Customer customer1 = new Customer(0, "aaa", "aaa", "aaa@", "aaa",null);
-		Customer customer2 = new Customer(0, "bbb", "bbb", "bbb@", "bbb",null);
-		Customer customer3 = new Customer(0, "ccc", "ccc", "ccc@", "ccc",null);
+		Customer customer1 = new Customer(0, "aaa", "aaa", "aaa@", "aaa", null);
+		Customer customer2 = new Customer(0, "bbb", "bbb", "bbb@", "bbb", null);
+		Customer customer3 = new Customer(0, "ccc", "ccc", "ccc@", "ccc", null);
 		adminService.addCustomer(customer1);
 		System.out.println("customer added: " + customer1);
 		System.out.println();
@@ -122,7 +127,7 @@ public class Test {
 		}
 		System.out.println("---------------------------------");
 		System.out.println();
-		adminService.updateCustomer(new Customer(1, "zzz", "zzz", "zzz@zzz", "zzz",null));
+		adminService.updateCustomer(new Customer(1, "zzz", "zzz", "zzz@zzz", "zzz", null));
 		System.out.println("update customer 1 succeeded");
 		System.out.println("---------------------------------");
 		System.out.println();
@@ -138,13 +143,9 @@ public class Test {
 		System.out.println("\t \t >>> companyTest start <<<");
 		System.out.println("--------------------------------------------------");
 		System.out.println();
-		System.out.println(1);
 		CompanyService companyService = (CompanyService) loginManager.login("zzz@", "zzz", ClientType.COMPANY);
-		System.out.println(2);
 		System.out.print("company id: ");
-		System.out.println(3);
 		System.out.println(companyService.getCompanyId());
-		System.out.println(4);
 		System.out.println();
 		System.out.println("----------------------------");
 		System.out.println();
@@ -153,18 +154,17 @@ public class Test {
 		System.out.println("-----------------------------");
 		System.out.println();
 		Coupon coupon1 = new Coupon(0, Category.ELECTRICITY, "aaa", "aaa", LocalDate.of(2022, 2, 9),
-				LocalDate.of(2023, 2, 9),11, 111, "aaa", companyService.findCompanyById(1), null);
-		
-		Coupon coupon2 = new Coupon(0, Category.FOOD, "bbb", "bbb", LocalDate.of(2022, 2, 9),
-				LocalDate.of(2023, 2, 9),22, 222, "bbb", companyService.findCompanyById(1), null);
-		
-		Coupon coupon3 = new Coupon(0, Category.SPORT, "ccc", "ccc", LocalDate.of(2022, 2, 9),
-				LocalDate.of(2023, 2, 9),33, 333, "ccc", companyService.findCompanyById(1), null);
-		
+				LocalDate.of(2023, 2, 9), 11, 111, "aaa", companyService.findCompanyById(1), null);
+
+		Coupon coupon2 = new Coupon(0, Category.FOOD, "bbb", "bbb", LocalDate.of(2022, 2, 9), LocalDate.of(2023, 2, 9),
+				22, 222, "bbb", companyService.findCompanyById(1), null);
+
+		Coupon coupon3 = new Coupon(0, Category.SPORT, "ccc", "ccc", LocalDate.of(2022, 2, 9), LocalDate.of(2023, 2, 9),
+				33, 333, "ccc", companyService.findCompanyById(1), null);
+
 		Coupon coupon4 = new Coupon(0, Category.VACATION, "ddd", "ddd", LocalDate.of(2022, 2, 9),
-				LocalDate.of(2023, 2, 9),44, 444, "ddd", companyService.findCompanyById(1), null);
-				
-		
+				LocalDate.of(2023, 2, 9), 44, 444, "ddd", companyService.findCompanyById(1), null);
+
 		companyService.addCoupon(coupon1);
 		companyService.addCoupon(coupon2);
 		companyService.addCoupon(coupon3);
@@ -190,7 +190,7 @@ public class Test {
 		System.out.println();
 		System.out.println();
 		companyService.updateCoupon(new Coupon(1, Category.FOOD, "zzz", "zzz", LocalDate.of(2022, 2, 9),
-				LocalDate.of(2023, 2, 9),99, 999, "zzz", companyService.findCompanyById(1), null));
+				LocalDate.of(2023, 2, 9), 99, 999, "zzz", companyService.findCompanyById(1), null));
 		System.out.println("update coupon 1 succeeded");
 		System.out.println("--------------------------------------");
 		System.out.println();
@@ -220,13 +220,9 @@ public class Test {
 		System.out.println();
 		System.out.println();
 		System.out.println();
-		
+
 	}
 
-	
-	
-	
-	
 	private void testCustomerService() throws CouponSystemException {
 		System.out.println("\t \t >>> customerTest start <<<");
 		System.out.println("--------------------------------------------------");
@@ -239,9 +235,9 @@ public class Test {
 		System.out.println();
 		System.out.println("customer details: ");
 		System.out.println(customerService.getCustomerDetails());
-		System.out.println();				
+		System.out.println();
 		System.out.println("---------------------------------------");
-		System.out.println();				
+		System.out.println();
 		customerService.purchaseCoupon(1);
 		customerService.purchaseCoupon(2);
 		customerService.purchaseCoupon(3);

@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -24,7 +25,7 @@ import lombok.ToString;
 @ToString(exclude = "coupons")
 @Entity
 public class Customer {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -32,13 +33,11 @@ public class Customer {
 	private String lastName;
 	private String email;
 	private String password;
-	
-	@ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-	@JoinTable(name = "customer_coupon",
-	joinColumns = @JoinColumn(name = "customer_id"),
-	inverseJoinColumns = @JoinColumn(name = "coupon_id"))
+
+	@ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinTable(name = "customer_coupon", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "coupon_id"))
 	private List<Coupon> coupons;
-	
+
 	public int addCoupon(Coupon coupon) {
 		if (coupons == null) {
 			this.coupons = new ArrayList<>();
@@ -46,5 +45,5 @@ public class Customer {
 		coupons.add(coupon);
 		return coupon.getId();
 
-}
+	}
 }
