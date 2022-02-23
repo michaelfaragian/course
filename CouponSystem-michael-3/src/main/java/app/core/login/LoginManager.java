@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import app.core.exception.CouponSystemException;
 import app.core.services.AdminService;
 import app.core.services.ClientService;
 import app.core.services.CompanyService;
@@ -16,22 +15,22 @@ public class LoginManager {
 	private ApplicationContext ctx;
 
 	
-	public ClientService login(String email, String password, ClientType clientType) {
+	public ClientService login(String email, String password, ClientType clientType, int id) {
 		if (clientType == ClientType.ADMINISTRATOR) {
 			AdminService adminService = ctx.getBean(AdminService.class);
-			if (adminService.login(email, password)) {
+			if (adminService.login(email, password , id)) {
 				return adminService;
 			}
 		} 
 		if (clientType == ClientType.CUSTOMER) {
 			CustomerService customerService = ctx.getBean(CustomerService.class);
-			if (customerService.login(email, password)) {
+			if (customerService.login(email, password, id)) {
 				return customerService;
 			}
 		} 
 		if (clientType == ClientType.COMPANY) {
 			CompanyService companyService = ctx.getBean(CompanyService.class);
-			if (companyService.login(email, password)) {
+			if (companyService.login(email, password, id)) {
 				return companyService;
 			}
 		}

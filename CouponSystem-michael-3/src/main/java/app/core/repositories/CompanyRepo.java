@@ -3,7 +3,6 @@ package app.core.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import app.core.entities.Company;
-import app.core.exception.CouponSystemException;
 
 public interface CompanyRepo extends JpaRepository<Company, Integer> {
 	
@@ -12,8 +11,12 @@ public interface CompanyRepo extends JpaRepository<Company, Integer> {
 	
 	boolean existsByNameOrEmail (String name, String Email);
 	
-	boolean existsByPasswordAndEmail (String name, String Email);
+	boolean existsByPasswordAndEmailAndId (String password, String Email, int id);
 	
 	Company findByNameAndEmail (String name, String Email);
+	
+	
+	
+	
 
 }

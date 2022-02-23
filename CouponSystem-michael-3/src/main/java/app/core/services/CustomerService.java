@@ -18,14 +18,14 @@ import app.core.exception.CouponSystemException;
 @Service
 public class CustomerService extends ClientService {
 	
-	private int customerId = 1;
+	private int customerId;
 	
 
 	public int getCustomerId() {
 		return customerId;
 	}
 	@Override
-	public Boolean login(String email, String password)  {
+	public Boolean login(String email, String password, int id)  {
 		Customer customer = customerRepo.findByEmailAndPassword(email, password);
 		if(customer == null) {
 			return false;

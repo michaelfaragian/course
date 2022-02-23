@@ -48,8 +48,9 @@ public class Coupon {
 	private double price;
 	private String image;
 	
+	@JsonIgnore
 	@ManyToOne (cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH})
-	@JoinColumn(name = "company_id")
+	@JoinColumn(name = "company_id" , nullable = false)
 	private Company company;
 	
 	@JsonIgnore

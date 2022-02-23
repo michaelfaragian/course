@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,7 +26,7 @@ public class CustomerController {
 	CustomerService customerService;
 	
 	@PostMapping("/{couponId}")
-	public String purchaseCoupon (@PathVariable int couponId) {
+	public String purchaseCoupon (@PathVariable int couponId ,@RequestHeader String token) {
 		try {
 			customerService.purchaseCoupon(couponId);
 			return "coupon "+couponId+" purchase";
@@ -34,7 +35,7 @@ public class CustomerController {
 		}
 	}
 	@GetMapping("/all")
-	public List<Coupon> getAllCustomerCoupon(){
+	public List<Coupon> getAllCustomerCoupon(@RequestHeader String token){
 		try {
 			return customerService.getAllCustomerCoupon();
 		} catch (Exception e) {
@@ -42,7 +43,7 @@ public class CustomerController {
 		}
 	}
 	@GetMapping("/category/{category}")
-	public List<Coupon> getCustomerCouponByCategory(Category category){
+	public List<Coupon> getCustomerCouponByCategory(Category category ,@RequestHeader String token){
 		try {
 			return customerService.getCustomerCouponByCategory(category);
 		} catch (Exception e) {
@@ -50,7 +51,7 @@ public class CustomerController {
 		}
 	}
 	@GetMapping("/price/{price}")
-	public List<Coupon> getCustomerCouponByCategory(double price){
+	public List<Coupon> getCustomerCouponByCategory(double price ,@RequestHeader String token){
 		try {
 			return customerService.getCustomerCouponByMaxPrice(price);
 		} catch (Exception e) {
@@ -58,7 +59,7 @@ public class CustomerController {
 		}
 	}
 	@GetMapping
-	public Customer getCustomerDetails(){
+	public Customer getCustomerDetails(@RequestHeader String token){
 		try {
 			return customerService.getCustomerDetails();
 		} catch (Exception e) {
