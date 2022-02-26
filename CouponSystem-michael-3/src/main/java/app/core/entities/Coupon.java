@@ -50,7 +50,7 @@ public class Coupon {
 	
 	@JsonIgnore
 	@ManyToOne (cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH})
-	@JoinColumn(name = "company_id" , nullable = false)
+	@JoinColumn(name = "company_id")
 	private Company company;
 	
 	@JsonIgnore

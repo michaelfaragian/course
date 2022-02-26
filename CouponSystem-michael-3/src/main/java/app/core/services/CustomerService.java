@@ -13,28 +13,28 @@ import app.core.entities.Coupon.Category;
 import app.core.entities.Customer;
 import app.core.exception.CouponSystemException;
 
-@Scope("prototype")
+//@Scope("prototype")
 @Transactional
 @Service
 public class CustomerService extends ClientService {
 	
-	private int customerId;
-	
-
-	public int getCustomerId() {
-		return customerId;
-	}
+//	private int customerId;
+//	
+//
+//	public int getCustomerId() {
+//		return customerId;
+//	}
 	@Override
-	public Boolean login(String email, String password, int id)  {
-		Customer customer = customerRepo.findByEmailAndPassword(email, password);
-		if(customer == null) {
-			return false;
-		}else {
-			customerId = customer.getId();
+	public Boolean login(String email, String password, int customerId)  {
+//		Customer customer = customerRepo.findByEmailAndPassword(email, password);
+//		if(customer == null) {
+//			return false;
+//		}else {
+//			customerId = customer.getId();
 		return customerRepo.existsByEmailAndPassword(email, password);
 		}
-	}
-	public void purchaseCoupon (int couponId) throws CouponSystemException {
+//	}
+	public void purchaseCoupon (int couponId, int customerId) throws CouponSystemException {
 		Customer customer = customerRepo.getById(customerId);
 		Optional<Coupon> opt = couponRepo.findById(couponId);
 		if(opt.isEmpty()) {
@@ -56,16 +56,16 @@ public class CustomerService extends ClientService {
 			customer.addCoupon(couponFromDb);
 		}
 	}
-	public List<Coupon> getAllCustomerCoupon(){
+	public List<Coupon> getAllCustomerCoupon(int customerId){
 		return couponRepo.findByCustomersId(customerId);
 	}
-	public List<Coupon> getCustomerCouponByCategory(Category category){
+	public List<Coupon> getCustomerCouponByCategory(Category category, int customerId){
 		return couponRepo.findByCustomersIdAndCategory(customerId, category);
 	}
-	public List<Coupon> getCustomerCouponByMaxPrice(double MaxPrice){
+	public List<Coupon> getCustomerCouponByMaxPrice(double MaxPrice, int customerId){
 		return couponRepo.findByCustomersIdAndPriceLessThan(customerId, MaxPrice);
 	}
-	public Customer getCustomerDetails(){
+	public Customer getCustomerDetails(int customerId){
 		return customerRepo.findById(customerId).get(); 
 	}
 

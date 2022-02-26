@@ -34,6 +34,9 @@ public class CompanyController {
 
 	@PostMapping("/add-coupon")
 	public String addCoupon(@RequestBody Coupon coupon ,@RequestHeader String token) {
+		if(jwtUtil.extractClient(token).clientType.name() != "COMPANY") {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
+		}
 		try {
 			int id = companyService.addCoupon(coupon , jwtUtil.extractClient(token).clientId);
 			return "coupon " + id + " added";
@@ -44,6 +47,9 @@ public class CompanyController {
 
 	@PutMapping("/update-coupon")
 	public String updateCoupon(@RequestBody Coupon coupon ,@RequestHeader String token) {
+		if(jwtUtil.extractClient(token).clientType.name() != "COMPANY") {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
+		}
 		try {
 			int id = companyService.updateCoupon(coupon , jwtUtil.extractClient(token).clientId);
 			return "coupon " + id + " updated";
@@ -51,51 +57,66 @@ public class CompanyController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
-//
-//	@DeleteMapping("/{couponId}")
-//	public String deleteCoupon(@PathVariable int couponId ,@RequestHeader String token) {
-//		try {
-//			int id = companyService.deleteCoupon(couponId);
-//			return "coupon " + id + " deleted";
-//		} catch (CouponSystemException e) {
-//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-//		}
-//	}
-//
+
+	@DeleteMapping("/{couponId}")
+	public String deleteCoupon(@PathVariable int couponId ,@RequestHeader String token) {
+		if(jwtUtil.extractClient(token).clientType.name() != "COMPANY") {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
+		}
+		try {
+			int id = companyService.deleteCoupon(couponId,jwtUtil.extractClient(token).clientId);
+			return "coupon " + id + " deleted";
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+	}
+
 	@GetMapping("/all")
 	public List<Coupon> getAllCompanyCoupons(@RequestHeader String token) {
+		if(jwtUtil.extractClient(token).clientType.name() != "COMPANY") {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
+		}
 		try {
 			return companyService.getAllCompanyCoupons(jwtUtil.extractClient(token).clientId);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
-//
-//	@GetMapping("/category/{category}")
-//	public List<Coupon> getCompanyCouponsByCategory(@PathVariable Category category ,@RequestHeader String token) {
-//		try {
-//			return companyService.getCompanyCouponsByCategory(category);
-//		} catch (Exception e) {
-//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-//		}
-//	}
-//
-//	@GetMapping("/price/{price}")
-//	public List<Coupon> getCompanyCouponsByMaxPrice(@PathVariable double price ,@RequestHeader String token) {
-//		try {
-//			return companyService.getCompanyCouponsByMaxPrice(price);
-//		} catch (Exception e) {
-//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-//		}
-//	}
-//
-//	@GetMapping
-//	public Company getCompanyDetailes(@RequestHeader String token) {
-//		try {
-//			return companyService.getCompanyDetailes();
-//		} catch (CouponSystemException e) {
-//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-//		}
-//	}
+
+	@GetMapping("/category/{category}")
+	public List<Coupon> getCompanyCouponsByCategory(@PathVariable Category category ,@RequestHeader String token) {
+		if(jwtUtil.extractClient(token).clientType.name() != "COMPANY") {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
+		}
+		try {
+			return companyService.getCompanyCouponsByCategory(category, jwtUtil.extractClient(token).clientId);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+	}
+
+	@GetMapping("/price/{price}")
+	public List<Coupon> getCompanyCouponsByMaxPrice(@PathVariable double price ,@RequestHeader String token) {
+		if(jwtUtil.extractClient(token).clientType.name() != "COMPANY") {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
+		}
+		try {
+			return companyService.getCompanyCouponsByMaxPrice(price, jwtUtil.extractClient(token).clientId);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+	}
+
+	@GetMapping
+	public Company getCompanyDetailes(@RequestHeader String token) {
+		if(jwtUtil.extractClient(token).clientType.name() != "COMPANY") {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
+		}
+		try {
+			return companyService.getCompanyDetailes(jwtUtil.extractClient(token).clientId);
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+	}
 
 }
