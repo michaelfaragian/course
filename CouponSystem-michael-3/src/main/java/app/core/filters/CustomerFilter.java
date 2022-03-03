@@ -11,14 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import app.core.jwt.util.JwtUtil;
 
-public class MyFilter implements Filter {
+public class CustomerFilter implements Filter {
 
 	private JwtUtil jwtUtil;
 	
-	public MyFilter (JwtUtil jwtUtil) {
+	public CustomerFilter (JwtUtil jwtUtil) {
 		super();
 		this.jwtUtil = jwtUtil;
 	}
@@ -27,10 +28,21 @@ public class MyFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 //		cast the req/reso to http
-		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletRequest req = (HttpServletRequest) request; 
 		HttpServletResponse resp = (HttpServletResponse) response;
+		resp.addHeader("Access-Control-Allow-Origin", "*");
+		resp.addHeader("Access-Control-Allow-Headers", "*");
 
 		String token = req.getHeader("token");
+		if(jwtUtil.extractClient(token).clientType.name() != "CUSTOMER") {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you cannot do this action");
+		}
+		if (token == null && req.getMethod().equals("OPTIONS")) {
+			System.out.println("this is preflight request: " + req.getMethod());
+			chain.doFilter(request, response);
+			return;
+		}
+
 		if (token !=null) {
 			try {
 				if(!jwtUtil.isTokenExpired(token)){

@@ -25,7 +25,7 @@ public class CustomerService extends ClientService {
 //		return customerId;
 //	}
 	@Override
-	public Boolean login(String email, String password, int customerId)  {
+	public boolean login(String email, String password)  {
 //		Customer customer = customerRepo.findByEmailAndPassword(email, password);
 //		if(customer == null) {
 //			return false;

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import app.core.jwt.util.JwtUtil;
 import app.core.login.ClientType;
 import app.core.services.AdminService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -33,26 +35,20 @@ public class AdminController {
 	JwtUtil jwtUtil;
 
 	@PostMapping("/add-company")
-	public String addCompany(@RequestBody Company company ,@RequestHeader String token) {
-		if(jwtUtil.extractClient(token).clientType.name() != "ADMINISTRATOR") {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
-		}
+	public int addCompany(@RequestBody Company company ,@RequestHeader String token) {
 		try {
 			int id = adminService.addCompany(company);
-			return "company "+id+" added" ;
+			return id;
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 
 	@PutMapping("/update-company")
-	public String updateCompany(@RequestBody Company company ,@RequestHeader String token) {
-		if(jwtUtil.extractClient(token).clientType.name() != "ADMINISTRATOR") {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
-		}
+	public int updateCompany(@RequestBody Company company ,@RequestHeader String token) {
 		try {
 			int id = adminService.updateCompany(company);
-			return "company "+id+"updated";
+			return id;
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
@@ -60,13 +56,10 @@ public class AdminController {
 	}
 
 	@DeleteMapping("/company/{companyId}")
-	public String deleteCompany(@PathVariable int companyId,@RequestHeader String token)  {
-		if(jwtUtil.extractClient(token).clientType.name() != "ADMINISTRATOR") {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
-		}
+	public void deleteCompany(@PathVariable int companyId,@RequestHeader String token)  {
 		try {
 			 adminService.deleteCompany(companyId);
-			return "company "+companyId+" deleted";
+//			return companyId;
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
@@ -75,9 +68,6 @@ public class AdminController {
 
 	@GetMapping("/get-all-companies")
 	public List<Company> getAllCompanies(@RequestHeader String token) {
-		if(jwtUtil.extractClient(token).clientType.name() != "ADMINISTRATOR") {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
-		}
 		try {
 			List<Company> companies = adminService.getAllCompanies();
 			return(companies);
@@ -88,9 +78,6 @@ public class AdminController {
 
 	@GetMapping("/company/{companyId}")
 	public Company getOneCompany(@PathVariable int companyId ,@RequestHeader String token) {
-		if(jwtUtil.extractClient(token).clientType.name() != "ADMINISTRATOR") {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
-		}
 		try {
 			Company company = adminService.getOneCompany(companyId);
 			return(company);
@@ -99,46 +86,34 @@ public class AdminController {
 		}
 	}
 	@PostMapping("/customer/add-customer")
-	public String addCustomer(@RequestBody Customer customer ,@RequestHeader String token){
-		if(jwtUtil.extractClient(token).clientType.name() != "ADMINISTRATOR") {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
-		}
+	public int addCustomer(@RequestBody Customer customer ,@RequestHeader String token){
 		try {
 			int id = adminService.addCustomer(customer);
-			return "customer "+id+" added";
+			return id;
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 	@PutMapping("update-customer")
-	public String updateCustomer(@RequestBody Customer customer ,@RequestHeader String token){
-		if(jwtUtil.extractClient(token).clientType.name() != "ADMINISTRATOR") {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
-		}
+	public int updateCustomer(@RequestBody Customer customer ,@RequestHeader String token){
 		try {
 			 int id = adminService.updateCustomer(customer);
-			 return "customer "+id+" updated";
+			 return id;
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 	@DeleteMapping("/customer/{customerId}")
-	public String deleteCustomer(@PathVariable int customerId ,@RequestHeader String token){
-		if(jwtUtil.extractClient(token).clientType.name() != "ADMINISTRATOR") {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
-		}
+	public int deleteCustomer(@PathVariable int customerId ,@RequestHeader String token){
 		try {
 			int id = adminService.deleteCustomer(customerId);
-			return "customer "+ id+ " deleted";
+			return id;
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 	@GetMapping("/get-all-customers")
 	public List<Customer> getAllCustomers(@RequestHeader String token) {
-		if(jwtUtil.extractClient(token).clientType.name() != "ADMINISTRATOR") {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
-		}
 		try {
 			List<Customer> customers = adminService.getAllCustomers();
 			return customers;
@@ -148,9 +123,6 @@ public class AdminController {
 	}
 	@GetMapping("/customer/{customerId}")
 	public Customer getOneCustomer(@PathVariable int customerId ,@RequestHeader String token) {
-		if(jwtUtil.extractClient(token).clientType.name() != "ADMINISTRATOR") {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "you Unauthorized to this action");
-		}
 		try {
 			Customer customer = adminService.getOneCustomer(customerId);
 			return customer;

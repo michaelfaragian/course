@@ -28,13 +28,13 @@ public class CompanyService extends ClientService {
 
 
 	@Override
-	public Boolean login(String email, String password, int id) {
+	public boolean login(String email, String password) {
 //		Company company = companyRepo.findCompanyByEmailAndPassword(email, password);
 //		if (company == null) {
 //			return false;
 //		}else {		
 //		companyId = company.getId();
-		return companyRepo.existsByPasswordAndEmailAndId(password, email, id);
+		return companyRepo.existsByPasswordAndEmail(password, email);
 		}
 //	}
 
@@ -63,6 +63,7 @@ public class CompanyService extends ClientService {
 			if (company.getId() != companyId) {
 				throw new CouponSystemException("addCoupon failed - you must enter your companyId");
 			} else {
+				coupon.
 				company.addCoupon(coupon);
 				Coupon coupon1 = couponRepo.findByTitleAndCompanyId(coupon.getTitle(), companyId);
 				return coupon1.getId();
@@ -72,11 +73,22 @@ public class CompanyService extends ClientService {
 
 	public int updateCoupon(Coupon coupon , int companyId) throws CouponSystemException {
 		if (couponRepo.existsByIdAndCompanyId(coupon.getId(), companyId)) {
-			couponRepo.save(coupon);
-			return coupon.getId();
+			Optional<Coupon> opt = couponRepo.findById(coupon.getId());
+			if(opt.isPresent()) {
+				Coupon couponFromDb = opt.get();
+				couponFromDb.setAmount(coupon.getAmount());
+				couponFromDb.setCategory(coupon.getCategory());
+				couponFromDb.setDescription(coupon.getDescription());
+				couponFromDb.setEndDate(coupon.getEndDate());
+				couponFromDb.setImage(coupon.getImage());
+				couponFromDb.setPrice(coupon.getPrice());
+				couponFromDb.setStartDate(coupon.getStartDate());
+				couponFromDb.setTitle(coupon.getTitle());
+			}
 		} else {
 			throw new CouponSystemException("updateCoupon failed - you cannot update the couponId or companyid");
 		}
+		return coupon.getId();
 	}
 
 	public int deleteCoupon(int couponId, int companyId) throws CouponSystemException {

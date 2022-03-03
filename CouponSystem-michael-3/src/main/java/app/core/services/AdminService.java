@@ -16,8 +16,8 @@ import app.core.exception.CouponSystemException;
 public class AdminService extends ClientService {
 
 	@Override
-	public Boolean login(String email, String password ,int id) {
-		return email.equals("admin@admin.com") && password.equals("admin");
+	public boolean login(String email, String password) {
+		return email.equals("aaa") && password.equals("aaa");
 	}
 	
 	public int addCompany(Company company) throws CouponSystemException {
