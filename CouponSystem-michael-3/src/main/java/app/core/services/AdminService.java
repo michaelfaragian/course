@@ -4,20 +4,27 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.core.entities.Company;
+import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exception.CouponSystemException;
 
 @Transactional
 @Service
 public class AdminService extends ClientService {
+	
+	@Value("${admin.service.email}")
+	private String email;
+	@Value("${admin.service.password}")
+	private String password;
 
 	@Override
 	public boolean login(String email, String password) {
-		return email.equals("aaa") && password.equals("aaa");
+		return email.equals(this.email) && password.equals(this.password);
 	}
 	
 	public int addCompany(Company company) throws CouponSystemException {
@@ -40,7 +47,10 @@ public class AdminService extends ClientService {
 	}
 	
 	public void deleteCompany (int companyId) throws CouponSystemException {
-		try {
+		if(!companyRepo.existsById(companyId)) {
+			throw new CouponSystemException("company with id "+companyId+" not exists");			
+		}
+		try { 
 			companyRepo.deleteById(companyId);			
 		}catch (Exception e) {
 			throw new CouponSystemException("deleteCompany failed");
@@ -106,9 +116,15 @@ public class AdminService extends ClientService {
 			throw new CouponSystemException("getOneCustomer failed customer with Id " + customerId+ " not exist");
 		}
 	}
+	public List<Coupon> getAllCoupons(){
+		List<Coupon> coupons = couponRepo.findAll();
+		return coupons;
+	}
+	
 	public void deleteExpiredCouponsByEndDate() {
 		couponRepo.deleteByEndDateBefore(LocalDate.now());
 	}
+	
 	
 	
 	

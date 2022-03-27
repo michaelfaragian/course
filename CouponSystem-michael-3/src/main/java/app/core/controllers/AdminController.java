@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import app.core.entities.Company;
+import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exception.CouponSystemException;
 import app.core.jwt.util.JwtUtil;
@@ -130,5 +131,6 @@ public class AdminController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
+	
 
 }

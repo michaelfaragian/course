@@ -30,7 +30,7 @@ public class JwtUtil {
 	
 	
 	private String signatureAlgorithm = SignatureAlgorithm.HS256.getJcaName();
-	@Value("${jwt.util.secret.key}")
+	@Value("${jwt.util.secret.key}") 
 	private String encodedScretKey;
 	private Key key;
 	@Value("${jwt.util.chrono.unit.number}")

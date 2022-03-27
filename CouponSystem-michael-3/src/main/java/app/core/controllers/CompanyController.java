@@ -46,20 +46,20 @@ public class CompanyController {
 	}
 
 	@PutMapping("/update-coupon")
-	public String updateCoupon(@RequestBody Coupon coupon ,@RequestHeader String token) {
+	public int updateCoupon(@RequestBody Coupon coupon ,@RequestHeader String token) {
 		try {
 			int id = companyService.updateCoupon(coupon , jwtUtil.extractClient(token).clientId);
-			return "coupon " + id + " updated";
+			return  id ;
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 
 	@DeleteMapping("/{couponId}")
-	public String deleteCoupon(@PathVariable int couponId ,@RequestHeader String token) {
+	public int deleteCoupon(@PathVariable int couponId ,@RequestHeader String token) {
 		try {
 			int id = companyService.deleteCoupon(couponId,jwtUtil.extractClient(token).clientId);
-			return "coupon " + id + " deleted";
+			return id;
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}

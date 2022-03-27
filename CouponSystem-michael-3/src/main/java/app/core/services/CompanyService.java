@@ -63,7 +63,7 @@ public class CompanyService extends ClientService {
 			if (company.getId() != companyId) {
 				throw new CouponSystemException("addCoupon failed - you must enter your companyId");
 			} else {
-				coupon.
+				
 				company.addCoupon(coupon);
 				Coupon coupon1 = couponRepo.findByTitleAndCompanyId(coupon.getTitle(), companyId);
 				return coupon1.getId();

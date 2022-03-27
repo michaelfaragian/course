@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,10 +33,10 @@ public class CustomerController {
 	JwtUtil jwtUtil;
 	
 	@PostMapping("/{couponId}")
-	public String purchaseCoupon (@PathVariable int couponId ,@RequestHeader String token) {
+	public int purchaseCoupon (@PathVariable int couponId ,@RequestHeader String token) {
 		try {
 			customerService.purchaseCoupon(couponId , jwtUtil.extractClient(token).clientId);
-			return "coupon "+couponId+" purchase";
+			return couponId;
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
@@ -49,7 +50,7 @@ public class CustomerController {
 		}
 	}
 	@GetMapping("/category/{category}")
-	public List<Coupon> getCustomerCouponByCategory(Category category ,@RequestHeader String token){
+	public List<Coupon> getCustomerCouponByCategory(@PathVariable Category category ,@RequestHeader String token){
 		try {
 			return customerService.getCustomerCouponByCategory(category, jwtUtil.extractClient(token).clientId);
 		} catch (Exception e) {
@@ -59,7 +60,7 @@ public class CustomerController {
 	
 	
 	@GetMapping("/price/{price}")
-	public List<Coupon> getCustomerCouponByMaxPrice(double price ,@RequestHeader String token){
+	public List<Coupon> getCustomerCouponByMaxPrice(@PathVariable double price ,@RequestHeader String token){
 		try {
 			return customerService.getCustomerCouponByMaxPrice(price, jwtUtil.extractClient(token).clientId);
 		} catch (Exception e) {
